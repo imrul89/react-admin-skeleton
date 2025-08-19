@@ -1,0 +1,41 @@
+import { {{modelNamePlural}}, {{modelName}} } from '@models/{{modelFileName}}';
+import baseService from '@services/core/base-service';
+import { API_END_POINTS } from '@utils/constants/api-end-points';
+
+export const {{serviceName}} = baseService.injectEndpoints({
+  endpoints: (builder) => ({
+    {{methods.getAll}}: builder.query<{{modelNamePlural}}, string>({
+      query: (queryParams) => ({
+        url: API_END_POINTS.{{link}} + `?${queryParams}`,
+        method: 'GET'
+      }),
+      providesTags: ['{{tagPlural}}']
+    }),
+    {{methods.getOne}}: builder.query<{{modelName}}, number>({
+      query: (id) => ({
+        url: API_END_POINTS.{{link}} + `/${id}`,
+        method: 'GET'
+      }),
+      providesTags: ['{{tag}}']
+    }),
+    {{methods.save}}Saved: builder.mutation<{{modelName}}, {{modelName}}>({
+      query: (requestData) => {
+        const requestUrl = API_END_POINTS.{{link}};
+        const requestMethod = requestData?.id ? 'PUT' : 'POST';
+
+        return {
+          url: requestUrl,
+          method: requestMethod,
+          body: requestData
+        };
+      },
+      invalidatesTags: ['{{tagPlural}}', '{{tag}}']
+    })
+  })
+});
+
+export const {
+  use{{exportedName.getAll}}Query,
+  use{{exportedName.getOne}}Query,
+  use{{exportedName.save}}SavedMutation
+} = {{serviceName}};

@@ -1,0 +1,118 @@
+.ant-input-number {
+    width: 100%;
+}
+
+.grid-action {
+    min-width: 170px !important;
+    text-align: left !important;
+}
+
+.grid-action.line-item {
+    min-width: 200px !important;
+    text-align: left !important;
+}
+
+.grid-action.creative {
+    width: 210px !important;
+    text-align: left !important;
+}
+
+.grid-action.ant-dropdown,
+.grid-action.ant-dropdown-menu {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+}
+
+.ant-table-wrapper .ant-table-sticky-holder {
+    z-index: 4 !important;
+}
+
+.ant-table tbody>tr>td:last-child:has(.ant-dropdown-trigger.ant-dropdown-open) {
+    z-index: 3 !important;
+}
+
+.ant-menu-horizontal {
+    border-bottom: none !important;
+}
+
+.ant-card .ant-card-head {
+    padding: 0 16px !important;
+}
+
+.ant-card .ant-card-body {
+    padding: 16px !important;
+}
+
+.tab-card {
+    .ant-card-body {
+        padding: 0 16px 16px 16px !important;
+    }
+}
+
+.ant-collapse-header {
+    color: rgba(0, 0, 0, 0.88) !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+}
+
+.login {
+    .ant-typography-secondary {
+        color: rgba(0, 0, 0, 0.65) !important;
+    }
+}
+
+.main-menu {
+    .ant-menu-sub {
+        background: inherit !important;
+    }
+}
+
+.ant-upload-wrapper .ant-upload-select {
+    display: inline;
+}
+
+.ant-modal-confirm-paragraph {
+    max-width: 100% !important;
+}
+.custom-tabs .ant-tabs-nav {
+    margin-bottom: 0 !important;
+}
+
+.ant-table-row-total {
+    font-weight: bold;
+    background-color: #f5f5f5;
+    color: #000;
+}
+
+.logo {
+    width: 200px !important;
+    height: 35px !important;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .logo {
+        width: 250px !important;
+        height: 43px !important;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .logo {
+        width: 300px !important;
+        height: 52px !important;
+    }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+    .logo {
+        width: 345px !important;
+        height: 60px !important;
+    }
+}
+
+@media (min-width: 1920px) {
+    .logo {
+        width: 465px !important;
+        height: 81px !important;
+    }
+}

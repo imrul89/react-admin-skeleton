@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dashboard-wrapper-class .ant-card .ant-card-body{
+    @apply !pt-0
+}

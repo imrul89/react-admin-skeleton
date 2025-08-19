@@ -1,0 +1,28 @@
+import { Link } from 'react-router-dom';
+import { Button } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import PageContent from '@layouts/partials/page-content';
+import PageHeader from '@layouts/partials/page-header';
+import UserTable from '@/features/users/user-table';
+
+const {{moduleNamePluralCap}} = () => {
+  return (
+    <>
+      <PageHeader
+        title="{{moduleNamePluralCap}}"
+        subTitle="Manage {{moduleName}}"
+      >
+        <Link to={'/{{moduleNamePlural}}/create'}>
+          <Button type={'primary'} icon={<PlusCircleOutlined />}>
+            Create {{moduleNameCap}}
+          </Button>
+        </Link>
+      </PageHeader>
+      <PageContent>
+        <{{moduleNameCap}}Table />
+      </PageContent>
+    </>
+  );
+};
+
+export default {{moduleNamePluralCap}};

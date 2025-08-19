@@ -1,0 +1,25 @@
+{
+  "moduleName": "Customer",
+  "options": {
+    "fields": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "description": "Full name of the customer"
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "required": true,
+        "description": "Email address of the customer"
+      },
+      {
+        "name": "phoneNumber",
+        "type": "string",
+        "required": false,
+        "description": "Contact phone number of the customer"
+      }
+    ]
+  }
+}

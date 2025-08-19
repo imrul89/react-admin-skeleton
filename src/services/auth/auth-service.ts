@@ -1,0 +1,32 @@
+import { AuthRequest, AuthResponse } from '@models/auth-model.ts';
+import { User } from '@models/user-model.ts';
+import baseService from '@services/core/base-service';
+import { API_END_POINTS } from '@utils/constants/api-end-points';
+
+export const authService = baseService.injectEndpoints({
+  endpoints: (builder) => ({
+    login: builder.mutation<AuthResponse, AuthRequest>({
+      query: (data) => ({
+        url: API_END_POINTS.auth,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['auth']
+    }),
+    authUser: builder.query<User, void>({
+      query: () => ({
+        url: API_END_POINTS.user,
+        method: 'GET'
+      }),
+      providesTags:['auth'],
+      extraOptions: {
+        maxRetries: 3
+      }
+    })
+  }),
+});
+
+export const {
+  useLoginMutation,
+  useAuthUserQuery
+} = authService;

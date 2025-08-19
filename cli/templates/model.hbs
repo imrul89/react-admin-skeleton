@@ -1,0 +1,11 @@
+export interface {{modelName}} {
+  id: number;
+  {{#each fields}}
+  {{name}}{{#unless required}}?{{/unless}}: {{type}};
+  {{/each}}
+}
+
+export interface {{modelNamePlural}} {
+  {{modelDataName}}: {{modelName}}[];
+  totalNumberOfRows: number;
+}
