@@ -1,7 +1,7 @@
+import UserForm from '@features/users/user-form';
 import PageContent from '@layouts/partials/page-content';
 import PageHeader from '@layouts/partials/page-header';
 import { UserPartial } from '@models/user-model';
-import UserForm from '@/features/users/user-form';
 
 const UserCreate = () => {
   const initialValues: UserPartial = {

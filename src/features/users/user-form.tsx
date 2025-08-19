@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
+import { useUserForm, useUserGroup } from '@hooks/use-users';
 import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
 import { User, UserPartial } from '@models/user-model';
 import { USER_STATUS } from '@utils/constants';
 import { prepareOptions } from '@utils/helpers';
 import { validationMessage } from '@utils/helpers/message-helpers';
-import { useUserForm, useUserGroup } from '@/hooks/use-users';
 interface UserFormProps {
   initialValues?: UserPartial;
   isEditMode?: boolean;

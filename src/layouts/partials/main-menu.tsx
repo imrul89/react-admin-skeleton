@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import MenuContext from '@contexts/menu-context';
-import { MenuItem } from '@models/utils-model.ts';
+import { MenuItem } from '@models/utils-model';
 import { MAIN_MENU_ITEMS } from '@utils/constants/menu-constants';
 
 interface MainMenuProps {

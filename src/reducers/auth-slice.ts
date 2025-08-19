@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AuthState } from '@models/auth-model.ts';
+import { AuthState } from '@models/auth-model';
 
 const initialState = {
   accessToken: null,

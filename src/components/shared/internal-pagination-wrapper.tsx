@@ -1,5 +1,5 @@
 import { Pagination } from 'antd';
-import { QueryParams } from '@models/utils-model.ts';
+import { QueryParams } from '@models/utils-model';
 import { PAGINATION_CONFIG } from '@utils/constants';
 
 interface InternalPaginationWrapperProps {

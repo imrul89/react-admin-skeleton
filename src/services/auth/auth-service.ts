@@ -1,5 +1,5 @@
-import { AuthRequest, AuthResponse } from '@models/auth-model.ts';
-import { User } from '@models/user-model.ts';
+import { AuthRequest, AuthResponse } from '@models/auth-model';
+import { User } from '@models/user-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 

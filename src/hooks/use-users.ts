@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { App } from 'antd';
 import useFilter from '@hooks/utility-hooks/use-filter';
-import { AppError, QueryParams } from '@models/utils-model.ts';
-import { formatQueryParams } from '@utils/helpers';
-import { User } from '@models/user-model.ts';
+import { User } from '@models/user-model';
+import { AppError, QueryParams } from '@models/utils-model';
 import {
   useUsersQuery,
   useUserSavedMutation,
   useUserQuery,
   useLazySearchUsersQuery,
   useUserGroupsQuery
-} from '@/services/user-service';
+} from '@services/user-service';
+import { formatQueryParams } from '@utils/helpers';
 
 interface Option {
   label: string,

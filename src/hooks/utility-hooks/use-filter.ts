@@ -2,7 +2,7 @@ import { SorterResult } from 'antd/es/table/interface';
 import _ from 'lodash';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TableProps } from 'antd';
-import { QueryParams } from '@models/utils-model.ts';
+import { QueryParams } from '@models/utils-model';
 import { DEFAULT_QUERY_PARAMS, PAGINATION_CONFIG } from '@utils/constants';
 import { formatQueryParams } from '@utils/helpers';
 

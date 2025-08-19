@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Table, Input, Card } from 'antd';
 import PaginationWrapper from '@components/shared/pagination-wrapper';
 import TableSkeleton from '@components/shared/table-skeleton';
+import { useUsers } from '@hooks/use-users';
 import useFilter from '@hooks/utility-hooks/use-filter';
 import { columns } from './user-table-columns';
-import { useUsers } from '@/hooks/use-users';
 
 const UserTable = () => {
   const { isLoading, data } = useUsers();

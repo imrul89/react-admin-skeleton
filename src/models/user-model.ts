@@ -10,12 +10,6 @@ export interface User {
     id: number;
     name: string;
   }
-  departments?:[
-    {
-      id: number;
-      name: string;
-    }
-  ]
 }
 
 export interface Users {

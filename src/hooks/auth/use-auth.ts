@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { App } from 'antd';
-import { AuthRequest } from '@models/auth-model.ts';
-import { AppError } from '@models/utils-model.ts';
+import { AuthRequest } from '@models/auth-model';
+import { AppError } from '@models/utils-model';
 import { setCredentials } from '@reducers/auth-slice';
 import { useLoginMutation } from '@services/auth/auth-service';
 

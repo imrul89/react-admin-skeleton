@@ -6,9 +6,9 @@ import PageLoader from '@components/shared/page-loader';
 import MenuContext from '@contexts/menu-context';
 import Header from '@layouts/partials/header';
 import Sidebar from '@layouts/partials/sidebar';
+import { User } from '@models/user-model';
 import { setUser } from '@reducers/user-slice';
 import { useAuthUserQuery } from '@services/auth/auth-service';
-import { User } from '@models/user-model.ts';
 import { useAppDispatch } from '@/store';
 
 const { Content } = Layout;
