@@ -4,9 +4,15 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "esModuleInterop": true,
     "skipLibCheck": true,
-
-    // development
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    /* Paths */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
@@ -22,16 +28,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@utils/*": ["src/utils/*"],
     },
-
-    /* Bundler mode */
-    "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
+    /* Linting / safety */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

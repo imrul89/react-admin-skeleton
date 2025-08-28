@@ -53,10 +53,10 @@ const ProfileMenu = () => {
           <UserOutlined className="text-[#001529] text-[16px]" />
         </Avatar>
         <Flex vertical>
-          <Typography.Text className="text-gray-100">
+          <Typography.Text style={{color: '#ddd'}}>
             { user.name }
           </Typography.Text>
-          <Typography.Text className="text-xs text-gray-400">
+          <Typography.Text style={{color: '#ddd'}}>
             { user.username }
           </Typography.Text>
         </Flex>

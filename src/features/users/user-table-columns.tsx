@@ -15,7 +15,7 @@ const columns: TableProps<User>['columns'] = [
     fixed: 'left',
     render: (_, record) => (
       <Link to={`/users/${record.id}`}>
-        <TypographyWrapper type="link" className="capitalize">
+        <TypographyWrapper type="text" className="capitalize">
           {record.name}
         </TypographyWrapper>
       </Link>

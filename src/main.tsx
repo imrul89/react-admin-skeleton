@@ -5,7 +5,6 @@ import { ConfigProvider, App as AntdApp } from 'antd';
 import { themeConfig } from '@utils/theme-config';
 import App from './app';
 import { store } from './store';
-import '@/styles/tailwind.css';
 import '@/styles/override-antd.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
