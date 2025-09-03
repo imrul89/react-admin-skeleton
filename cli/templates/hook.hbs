@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { App } from 'antd';
 import useFilter from '@hooks/utility-hooks/use-filter';
-import { AppError, QueryParams } from '@models/utils/utils-model';
 import { {{modelName}} } from '@models/{{modelFileName}}';
-import { formatQueryParams } from '@utils/helpers';
+import { AppError, QueryParams } from '@models/utils-model';
 import {
   use{{exportedName.getAll}}Query,
   use{{exportedName.save}}SavedMutation,
   use{{exportedName.getOne}}Query
 } from '@services/{{serviceFileName}}';
+import { formatQueryParams } from '@utils/helpers';
 
 export const use{{hooksName.getAll}} = () => {
   const location = useLocation();

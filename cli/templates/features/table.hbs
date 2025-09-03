@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Table, Input, Card } from 'antd';
 import PaginationWrapper from '@components/shared/pagination-wrapper';
 import TableSkeleton from '@components/shared/table-skeleton';
-import { {{hooksName}} } from '@hooks/{{hooksFileName}}';
+import { use{{hooksName.getAll}} } from '@hooks/{{hooksFileName}}';
 import useFilter from '@hooks/utility-hooks/use-filter';
 import { columns } from './{{tableFileName}}-columns';
 
 const {{tableName}}Table = () => {
   const { getQueryParams, setQueryParams, sortTableColumn } = useFilter();
-  const { isLoading, data } = {{hooksName}}();
+  const { isLoading, data } = use{{hooksName.getAll}}();
 
   const [search, setSearch] = useState(getQueryParams().search as string);
 
@@ -44,7 +44,6 @@ const {{tableName}}Table = () => {
             onChange={sortTableColumn}
             rowKey="id"
             bordered
-            tableLayout="fixed"
           />
           <div className="flex justify-end mt-4">
             <PaginationWrapper totalItems={data?.totalNumberOfRows || 0} />

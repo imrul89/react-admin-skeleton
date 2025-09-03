@@ -49,7 +49,7 @@ const routes = () => {
       component: Profile,
       exact: true,
       children: []
-    }
+    },
   ];
 };
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env ts-node
 
 import fs from 'fs';
-import handlebars from 'handlebars';
 import _ from 'lodash';
 import path from 'path';
 import { fileURLToPath } from 'url';
-//import { generateHook } from './libs/generate-hook.ts';
-//import { generateModel } from './libs/generate-model.ts';
-//import { generateService } from './libs/generate-service.ts';
 import { generateFeatures } from './libs/generate-features.ts';
+import { generateHook } from './libs/generate-hook.ts';
+import { generateModel } from './libs/generate-model.ts';
+import { generateRoute } from './libs/generate-route.ts';
+import { generateService } from './libs/generate-service.ts';
 import { Module } from './models/index.ts';
 import settings from './settings.json' assert { type: 'json' };
 import { getDirectoryName } from './utils/helpers.ts';
@@ -31,59 +31,38 @@ if (_.toLower(settings.moduleName) !== _.toLower(moduleName)) {
 }
 
 const moduleDir = path.join(__dirname, '../src/pages', getDirectoryName(moduleName));
-//
-// if (fs.existsSync(moduleDir)) {
-//   console.error(`❌ The ${moduleName} module already exist.`);
-//   process.exit(1);
-// }
-//
-// const isModelGenerated = generateModel(settingData);
-//
-// if (!isModelGenerated) {
-//   process.exit(1);
-// }
-//
-// const isServiceGenerated = generateService(settingData);
-//
-// if (!isServiceGenerated) {
-//   process.exit(1);
-// }
-//
-// const isHookGenerated = generateHook(settingData);
-//
-// if (!isHookGenerated) {
-//   process.exit(1);
-// }
+
+if (fs.existsSync(moduleDir)) {
+  console.error(`❌ The ${moduleName} module already exist.`);
+  //process.exit(1);
+}
+
+const isModelGenerated = generateModel(settingData);
+
+if (!isModelGenerated) {
+  //process.exit(1);
+}
+
+const isServiceGenerated = generateService(settingData);
+
+if (!isServiceGenerated) {
+  //process.exit(1);
+}
+
+const isHookGenerated = generateHook(settingData);
+
+if (!isHookGenerated) {
+  //process.exit(1);
+}
 
 const isFeatureGenerated = generateFeatures(settingData);
 
 if (!isFeatureGenerated) {
-  process.exit(1);
+  //process.exit(1);
 }
 
-process.exit(1);
+const isRouteGenerated = generateRoute(settingData);
 
-// Paths
-const moduleFile = path.join(moduleDir, `index.tsx`);
-
-
-
-const templatePath = path.join(__dirname, './templates/pages/list.hbs');
-const templateSource = fs.readFileSync(templatePath, 'utf8');
-const template = handlebars.compile(templateSource);
-
-const templateContent = template({
-  moduleName: _.toLower(moduleName),
-  moduleNameCap: _.upperFirst(_.camelCase(moduleName)),
-  moduleNamePlural: `${_.toLower(moduleName)}s`,
-  moduleNamePluralCap: `${_.upperFirst(_.camelCase(moduleName))}s`
-});
-
-// Create folder and file
-if (!fs.existsSync(moduleDir)) {
-  fs.mkdirSync(moduleDir, { recursive: true });
+if (!isRouteGenerated) {
+  //process.exit(1);
 }
-
-fs.writeFileSync(moduleFile, templateContent, { encoding: 'utf8' });
-
-console.log(`✅ The ${moduleName} module has been created successfully.`);

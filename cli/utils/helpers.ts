@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
+import { Field } from '../models';
 
 export const getDirectoryName = (moduleName: string): string => {
   return _.kebabCase(pluralize(moduleName));
@@ -31,4 +32,20 @@ export const getServiceFileName = (moduleName: string): string => {
 
 export const getHookFileName = (moduleName: string): string => {
   return `use-${_.lowerCase(_.kebabCase(pluralize(moduleName)))}.ts`;
+};
+
+export const getFormInputs = (fields: Field[]) => {
+  const components = fields.map(field => {
+    if (field.type === 'number') {
+      return 'Select';
+    }
+    
+    if (field.type === 'boolean') {
+      return 'Switch';
+    }
+    
+    return 'Input';
+  });
+  
+  return Array.from(new Set(components)).join(', ');
 };

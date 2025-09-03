@@ -1,13 +1,15 @@
 export const validationMessage = (label: string, rule?: 'number' | 'email'): string => {
+  const lowerCaseLabel = label.toLowerCase();
+  
   switch (rule) {
     case 'number': {
-      return `The ${label} field must be a number!`;
+      return `The ${lowerCaseLabel} field must be a number!`;
     }
     case 'email': {
-      return `The ${label} field must be a valid email address!`;
+      return `The ${lowerCaseLabel} field must be a valid email address!`;
     }
     default: {
-      return `The ${label} field is required!`;
+      return `The ${lowerCaseLabel} field is required!`;
     }
   }
 };
