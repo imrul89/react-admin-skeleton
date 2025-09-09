@@ -14,5 +14,5 @@ export const MAIN_MENU_ITEMS = [
     key: '/users',
     label: <MenuLink to={'/users'}>Users</MenuLink>,
     icon: <UserOutlined />
-  }
+  },
 ];
