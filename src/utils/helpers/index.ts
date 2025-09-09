@@ -10,13 +10,13 @@ import {
   QueryParams
 } from '@models/utils-model';
 
-export const isProd = process.env.MODE === 'production';
+export const isProd = import.meta.env.MODE === 'production';
 
 export const isJsonString = (value: string) => {
   try {
     JSON.parse(value);
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };

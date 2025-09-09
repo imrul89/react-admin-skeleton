@@ -4,10 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "local": "vite --port 3000 --mode local-dev",
-    "dev": "vite --port 3000 --mode development",
-    "build:dev": "tsc && vite build --mode development",
-    "build:prod": "tsc && vite build --mode production",
+    "dev": "vite --port 3000 --mode dev",
+    "build:dev": "tsc && vite build --mode dev",
+    "build:prod": "tsc && vite build --mode prod",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "preview": "vite preview"
   },

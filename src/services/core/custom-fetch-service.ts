@@ -14,11 +14,10 @@ import { REDIRECT_SERVICE_END_POINTS } from '@utils/constants';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 import { RootState } from '@/store';
 
-const baseUrl = process.env.API_BASE_URL as string;
 const mutex = new Mutex();
 
 const baseApi = fetchBaseQuery({
-  baseUrl: baseUrl,
+  baseUrl: __API_BASE_URL__,
   prepareHeaders: (headers: Headers, { getState }) => {
     const state = getState() as RootState;
     const token = state.auth.accessToken as string;
