@@ -8,49 +8,48 @@ import {
   DynamicUserBreadcrumb
 } from '@/routes/route-utils';
 
-const routes = () => {
-  return [
-    {
-      path: '',
-      breadcrumb: DashboardBreadcrumb,
-      component: Dashboard,
-      exact: true,
-      children: []
-    },
-    {
-      path: 'users',
-      breadcrumb: 'Users',
-      component: '',
-      exact: true,
-      children: [
-        {
-          path: '',
-          breadcrumb: 'Users',
-          component: Users,
-          exact: true
-        },
-        {
-          path: 'create',
-          breadcrumb: 'Create User',
-          component: UserCreate,
-          exact: true
-        },
-        {
-          path: ':id',
-          breadcrumb: DynamicUserBreadcrumb,
-          component: UserEdit,
-          exact: true
-        }
-      ]
-    },
-    {
-      path: 'profile',
-      breadcrumb: 'Profile',
-      component: Profile,
-      exact: true,
-      children: []
-    },
-  ];
-};
+const routes = [
+  {
+    path: '',
+    breadcrumb: DashboardBreadcrumb,
+    component: Dashboard,
+    exact: true,
+    children: []
+  },
+  {
+    path: 'users',
+    breadcrumb: 'Users',
+    component: '',
+    exact: true,
+    children: [
+      {
+        path: '',
+        breadcrumb: 'Users',
+        component: Users,
+        exact: true
+      },
+      {
+        path: 'create',
+        breadcrumb: 'Create User',
+        component: UserCreate,
+        exact: true
+      },
+      {
+        path: ':id',
+        breadcrumb: DynamicUserBreadcrumb,
+        component: UserEdit,
+        exact: true
+      }
+    ]
+  },
+  {
+    path: 'profile',
+    breadcrumb: 'Profile',
+    component: Profile,
+    exact: true,
+    children: [
+    ]
+  },
+];
 
 export default routes;
