@@ -36,7 +36,7 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         >
-          {routes().map(({ component: Component, path , children}) => (
+          {routes.map(({ component: Component, path , children}) => (
             <Route
               path={`/${path}`}
               element={children.length > 0 ? <Outlet /> : <Component />}

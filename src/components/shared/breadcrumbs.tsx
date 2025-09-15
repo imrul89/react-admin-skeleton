@@ -6,7 +6,7 @@ import routes from '@/routes/routes';
 
 const Breadcrumbs = () => {
   const location = useLocation();
-  const breadcrumbs = useBreadcrumbs(routes());
+  const breadcrumbs = useBreadcrumbs(routes);
   
   const breadcrumbItems = breadcrumbs.map(({ match, breadcrumb }) => ({
     key: match.pathname,
