@@ -6,7 +6,7 @@ A skeleton project for building React admin dashboards with modern tools and tec
 
 ```
 git clone git@github.com:imrul89/react-admin-skeleton.git
-cd your_project
+cd react-admin-skeleton
 yarn install
 yarn dev
 ```
