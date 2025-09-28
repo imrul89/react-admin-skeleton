@@ -1,17 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '@models/user-model';
+import { UserDetails } from '@models/user-model';
 
 const initialState = {
   id: 0,
   name: '',
   username: '',
-} as User;
+  email: '',
+  status: 1,
+  permissions: []
+} as UserDetails;
 
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<UserDetails>) => {
       return { ...state, ...action.payload };
     },
     unsetUser: () => {

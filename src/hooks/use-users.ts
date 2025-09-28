@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { App } from 'antd';
 import useFilter from '@hooks/utility-hooks/use-filter';
-import { User } from '@models/user-model';
+import { UserFormData } from '@models/user-model';
 import { AppError, QueryParams } from '@models/utils-model';
 import {
   useUsersQuery,
   useUserSavedMutation,
   useUserQuery,
-  useLazySearchUsersQuery,
-  useUserGroupsQuery
+  useLazySearchUsersQuery
 } from '@services/user-service';
 import { formatQueryParams } from '@utils/helpers';
 
@@ -65,11 +64,11 @@ export const useUserForm = () => {
     }
 
     if (isError && error) {
-      message.error((error as AppError).data.errors);
+      message.error((error as AppError).data.message);
     }
   }, [isSuccess, isError, error]);
 
-  const onSaved = (user: User) => {
+  const onSaved = (user: UserFormData) => {
     userSaved(user);
   };
 
@@ -85,26 +84,6 @@ export const useUser = (userId: number) => {
   return {
     isLoading,
     user
-  };
-};
-
-export const useUserGroup = () => {
-  const { isLoading, data, isSuccess } = useUserGroupsQuery();
-  const [userGroupOptions, setUserGroupOptions] = useState<Option[]>([]);
-  useEffect(() => {
-    if (!isLoading && isSuccess) {
-      setUserGroupOptions(
-        data?.map(group => ({
-          label: group.name,
-          value: group.id
-        }))
-      );
-    }
-  }, [isSuccess]);
-
-  return {
-    isLoading,
-    userGroupOptions
   };
 };
 

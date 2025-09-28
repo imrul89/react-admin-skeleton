@@ -33,24 +33,27 @@ const columns: TableProps<User>['columns'] = [
     )
   },
   {
-    title: 'Mobile No',
-    dataIndex: 'mobile_no',
+    title: 'Username',
+    dataIndex: 'username',
     width: 150,
-    key: 'mobile_no',
+    key: 'username',
     render: (_, record) => (
       <TypographyWrapper type="text">
-        {record.mobile_no}
+        {record.username}
       </TypographyWrapper>
     )
   },
   {
-    title: 'User Group',
-    dataIndex: 'user_group',
+    title: 'Roles',
     width: 150,
-    key: 'user_group',
+    key: 'roles',
     render: (_, record) => (
       <TypographyWrapper type="text">
-        {record.user_group?.name}
+        {record.roles.map((role) => (
+          <Tag key={`${record}-${role.id}`}>
+            {role.name}
+          </Tag>
+        ))}
       </TypographyWrapper>
     )
   },

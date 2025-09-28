@@ -31,7 +31,8 @@ export const useAuth = () => {
   const onLogin = async (requestData: AuthRequest) => {
     const formData = {
       username: requestData.username,
-      password: requestData.password
+      password: requestData.password,
+      year: requestData.year
     };
     
     await login(formData);

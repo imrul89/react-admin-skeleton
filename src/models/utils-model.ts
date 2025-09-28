@@ -20,6 +20,7 @@ export interface ReportErrorData {
 export interface AppError {
   data: {
     errors?: string[];
+    message?: string[];
   }
 }
 
@@ -45,8 +46,6 @@ export interface QueryParams {
 export interface Option {
   label: string;
   value: string | number | boolean;
-  title?: string;
-  owned_publishers?: boolean;
 }
 
 export type Options = Record<string, Option>;

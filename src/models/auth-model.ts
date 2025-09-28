@@ -6,6 +6,7 @@ export interface AuthState {
 export interface AuthRequest {
   username: string;
   password: string;
+  year: number;
 }
 
 export interface AuthResponse {

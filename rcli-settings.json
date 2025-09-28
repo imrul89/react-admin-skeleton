@@ -1,25 +1,25 @@
 {
-  "moduleName": "Customer",
+  "moduleName": "SchoolClass",
   "options": {
     "fields": [
       {
-        "name": "name",
+        "name": "title",
         "type": "string",
         "required": true
       },
       {
-        "name": "email",
+        "name": "code",
         "type": "string",
         "required": true
       },
       {
-        "name": "phone_number",
-        "type": "string",
+        "name": "serial",
+        "type": "number",
         "required": false
       },
       {
-        "name": "status",
-        "type": "boolean",
+        "name": "coaching_applicable",
+        "type": "string",
         "required": false
       }
     ]

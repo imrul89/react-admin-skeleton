@@ -1,15 +1,12 @@
+import { Role } from '@models/role-model';
+
 export interface User {
   id: number;
   name: string;
   username: string;
   email: string;
-  mobile_no: string;
-  user_group_id: number;
+  roles: Role[];
   status: number;
-  user_group?:{
-    id: number;
-    name: string;
-  }
 }
 
 export interface Users {
@@ -17,12 +14,24 @@ export interface Users {
   totalNumberOfRows: number;
 }
 
-export interface UserGroup{
-  id: number;
+export type UserPartial = Partial<User>;
+
+export interface UserFormData {
+  id?: number;
   name: string;
-}
-export interface UserGroups {
-  userGroups: UserGroup[];
+  username: string;
+  password?: string;
+  email?: string;
+  role_ids: number[];
+  status: number;
 }
 
-export type UserPartial = Partial<User>;
+export interface UserDetails {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  status: number;
+  year: number;
+  permissions?: string[];
+}

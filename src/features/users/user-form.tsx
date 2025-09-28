@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
-import { useUserForm, useUserGroup } from '@hooks/use-users';
+import { useRoleOptions } from '@hooks/use-roles';
+import { useUserForm } from '@hooks/use-users';
 import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
-import { User, UserPartial } from '@models/user-model';
+import { UserFormData, UserPartial } from '@models/user-model';
 import { USER_STATUS } from '@utils/constants';
 import { prepareOptions } from '@utils/helpers';
 import { validationMessage } from '@utils/helpers/message-helpers';
+
 interface UserFormProps {
   initialValues?: UserPartial;
   isEditMode?: boolean;
@@ -21,7 +23,7 @@ const UserForm = ({
   const formValues = Form.useWatch([], form);
   const isFormValid = useFormValidation(form, formValues);
   
-  const { isLoading: isUserGroupLoading, userGroupOptions } = useUserGroup();
+  const { isRoleOptionLoading, roleOptions } = useRoleOptions();
   const { onSaved, isLoading } = useUserForm();
   
   useEffect(() => {
@@ -33,8 +35,13 @@ const UserForm = ({
 
   }, [initialValues]);
 
-  const onFinished = (values: User) => {
+  const onFinished = (values: UserFormData) => {
     values.id = isEditMode ? initialValues?.id ?? 0 : 0;
+    
+    if (isEditMode && !values.password) {
+      delete values.password;
+    }
+    
     onSaved(values);
   };
   
@@ -46,7 +53,7 @@ const UserForm = ({
       initialValues={initialValues}
       onFinish={onFinished}
     >
-      <Card title="User Form">
+      <Card title={initialValues?.id ? 'Edit user' : 'Create user'}>
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item
@@ -62,30 +69,23 @@ const UserForm = ({
               label="Email"
               name="email"
               rules={[
-                { required: true, message: validationMessage('email') },
                 { type: 'email', message: 'Please enter a valid email!' }
               ]}
             >
               <Input type="email" placeholder="Email" />
             </Form.Item>
             <Form.Item
-              label="Mobile No"
-              name="mobile_no"
-              rules={[{ required: true, message: validationMessage('mobile no') }]}
-            >
-              <Input placeholder="Mobile No" />
-            </Form.Item>
-            <Form.Item
-              label="User Group"
-              name="user_group_id"
+              label="Roles"
+              name="role_ids"
               rules={[
-                { required: true, message: validationMessage('user group')}
+                { required: true, message: validationMessage('roles')}
               ]}
             >
               <Select
-                loading={isUserGroupLoading}
-                placeholder="Select User Group"
-                options={userGroupOptions}
+                mode="multiple"
+                loading={isRoleOptionLoading}
+                placeholder="Select Roles"
+                options={roleOptions}
                 allowClear
               />
             </Form.Item>

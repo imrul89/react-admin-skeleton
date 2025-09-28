@@ -1,5 +1,5 @@
 import { AuthRequest, AuthResponse } from '@models/auth-model';
-import { User } from '@models/user-model';
+import { UserDetails } from '@models/user-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 
@@ -13,7 +13,7 @@ export const authService = baseService.injectEndpoints({
       }),
       invalidatesTags: ['auth']
     }),
-    authUser: builder.query<User, void>({
+    authUser: builder.query<UserDetails, void>({
       query: () => ({
         url: API_END_POINTS.user,
         method: 'GET'

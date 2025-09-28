@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 import { AuthResponse } from '@models/auth-model';
-import { User } from '@models/user-model';
+import { UserDetails } from '@models/user-model';
 import { setCredentials, logOut} from '@reducers/auth-slice';
 import { setRedirectPath } from '@reducers/redirect-slice';
 import { setUser } from '@reducers/user-slice';
@@ -50,7 +50,7 @@ const baseQueryWithReAuth: BaseQueryFn<
   let response = await baseApi(requestArgs, api, extraOptions);
   
   // @ts-ignore
-  if (response.error && response.error.status === 401 && response.error?.data?.errors === 'Unauthorized') {
+  if (response.error && response.error.status === 401 && response.error?.data?.message === 'Unauthorized') {
     
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
@@ -96,7 +96,7 @@ const baseQueryWithReAuth: BaseQueryFn<
             
             if (userResponse.data) {
               api.dispatch(
-                setUser(userResponse.data as User)
+                setUser(userResponse.data as UserDetails)
               );
             }
             

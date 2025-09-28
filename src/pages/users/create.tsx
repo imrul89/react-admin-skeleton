@@ -1,16 +1,15 @@
 import UserForm from '@features/users/user-form';
 import PageContent from '@layouts/partials/page-content';
 import PageHeader from '@layouts/partials/page-header';
-import { UserPartial } from '@models/user-model';
+import { UserFormData } from '@models/user-model';
 
 const UserCreate = () => {
-  const initialValues: UserPartial = {
+  const initialValues: UserFormData = {
     name: '',
     username: '',
     email: '',
-    mobile_no: '',
-    user_group_id: 1,
     status: 1,
+    role_ids: []
   };
   
   return (

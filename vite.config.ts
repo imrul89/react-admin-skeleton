@@ -5,12 +5,12 @@ import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-
+  
   return {
     define: {
-      __API_BASE_URL__: JSON.stringify(
-        env.VITE_API_BASE_URL
-      ),
+      __API_BASE_URL__: JSON.stringify(env.VITE_API_BASE_URL),
+      __APP_CODE__: JSON.stringify(env.VITE_APP_CODE),
+      __APP_TITLE__: JSON.stringify(env.VITE_APP_TITLE),
     },
     plugins: [
       react(),

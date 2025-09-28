@@ -1,4 +1,4 @@
-import { User, UserGroup, Users } from '@models/user-model';
+import { User, UserFormData, Users } from '@models/user-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 
@@ -18,10 +18,10 @@ export const usersService = baseService.injectEndpoints({
       }),
       providesTags: ['user']
     }),
-    userSaved: builder.mutation<User, User>({
+    userSaved: builder.mutation<User, UserFormData>({
       query: (user) => {
         const requestUrl = API_END_POINTS.users;
-        const requestMethod = user?.id ? 'PUT' : 'POST';
+        const requestMethod = user?.id ? 'PATCH' : 'POST';
 
         return {
           url: requestUrl,
@@ -36,13 +36,6 @@ export const usersService = baseService.injectEndpoints({
         url: `${API_END_POINTS.users}?limit=500&offset=0&search=${searchQuery}`,
         method: 'GET'
       })
-    }),
-    userGroups: builder.query<UserGroup[], void>({
-      query: () => ({
-        url: API_END_POINTS.users + '/user-groups',
-        method: 'GET'
-      }),
-      providesTags: ['user']
     })
   })
 });
@@ -50,7 +43,6 @@ export const usersService = baseService.injectEndpoints({
 export const {
   useUsersQuery,
   useUserQuery,
-  useUserGroupsQuery,
   useLazySearchUsersQuery,
   useUserSavedMutation
 } = usersService;

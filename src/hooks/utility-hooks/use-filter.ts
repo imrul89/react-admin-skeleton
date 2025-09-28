@@ -56,6 +56,10 @@ const useFilter = () => {
   const sortTableColumn: TableProps<any>['onChange'] = (_, __, sorter: SorterResult<any> | SorterResult<any>[]) => {
     const { field, order } = sorter as Sorter;
     
+    if (!field || !order) {
+      return;
+    }
+    
     setQueryParams({
       ...getQueryParams(),
       sort: order === 'ascend' ? field : `-${field}`

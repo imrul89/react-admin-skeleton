@@ -6,7 +6,7 @@ import PageLoader from '@components/shared/page-loader';
 import MenuContext from '@contexts/menu-context';
 import Header from '@layouts/partials/header';
 import Sidebar from '@layouts/partials/sidebar';
-import { User } from '@models/user-model';
+import { UserDetails } from '@models/user-model';
 import { setUser } from '@reducers/user-slice';
 import { useAuthUserQuery } from '@services/auth/auth-service';
 import { useAppDispatch } from '@/store';
@@ -22,7 +22,7 @@ const DefaultLayout = () => {
   
   useEffect(() => {
     if (isSuccess && data) {
-      const newUserData = Object.assign({}, data) as User;
+      const newUserData = Object.assign({}, data) as UserDetails;
       dispatch(setUser(newUserData));
     }
   }, [isFetching, data, isSuccess]);
