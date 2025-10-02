@@ -166,3 +166,98 @@ export const numberValidation = (e: React.KeyboardEvent<HTMLInputElement>) => {
   
   return;
 };
+
+export const getBase64BlobSize = (base64: string): number => {
+  const byteString = atob(base64.split(',')[1]);
+  const ab = new Uint8Array(byteString.length);
+  
+  for (let i = 0; i < byteString.length; i++) {
+    ab[i] = byteString.charCodeAt(i);
+  }
+  
+  const blob = new Blob([ab]);
+  return blob.size;
+};
+
+export const resizeCroppedImage = (imageSrc: string, width: number, height: number) => {
+  const image = new Image();
+  image.src = imageSrc;
+  
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  canvas.width = width;
+  canvas.height = height;
+  
+  const imageType = imageSrc.substring(imageSrc.indexOf(':') + 1, imageSrc.indexOf(';'));
+  
+  return new Promise<string>((resolve) => {
+    image.onload = () => {
+      if (ctx) {
+        ctx.drawImage(
+          image,
+          0,
+          0,
+          width,
+          height
+        );
+        
+        resolve(canvas.toDataURL(imageType));
+      }
+    };
+  });
+};
+
+export const getFileExtension = (file: File) => {
+  return file.name.split('.').pop();
+};
+
+export const getImageBase64 = (file: File, width?: number, height?: number, isCropEnabled = true): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(
+      file.type === 'image/gif' || !isCropEnabled ? reader.result as string : resizeCroppedImage(reader.result as string, width!, height!)
+    );
+    reader.onerror = error => reject(error);
+  });
+};
+
+export const getImageDimension = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target?.result as string;
+      img.onload = () => {
+        const { width, height } = img;
+        resolve(`${width}x${height}`);
+      };
+    };
+    reader.readAsDataURL(file);
+    reader.onerror = error => reject(error);
+  });
+};
+
+export const base64ToFile = (base64String: string, fileName: string, mimeType: string): File => {
+  const byteString = atob(base64String.split(',')[1]);
+  const byteArray = new Uint8Array(byteString.length);
+  
+  for (let i = 0; i < byteString.length; i++) {
+    byteArray[i] = byteString.charCodeAt(i);
+  }
+  
+  const blob = new Blob([byteArray], { type: mimeType });
+  return new File([blob], fileName, { type: mimeType });
+};
+
+export const getAspectRatio = (dimension: string) => {
+  const gcd = (a: number, b: number): number => {
+    return b === 0 ? a : gcd(b, a % b);
+  };
+  
+  const [width, height] = dimension.split('x').map(Number);
+  
+  const divisor = gcd(width, height);
+  return (width / divisor) / (height / divisor);
+};

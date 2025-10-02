@@ -63,8 +63,11 @@ export const useStudentForm = () => {
     }
   }, [isSuccess, isError, error]);
 
-  const onSaved = (student: StudentRequestData) => {
-    studentSaved(student);
+  const onSaved = (id?: number, student: FormData) => {
+    studentSaved({
+      id,
+      formData: student
+    });
   };
 
   return {

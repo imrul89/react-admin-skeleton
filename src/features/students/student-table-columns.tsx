@@ -1,25 +1,33 @@
 import { Link } from 'react-router-dom';
-import { TableProps, Tag, Typography } from 'antd';
+import { TableProps, Tag, Typography, Avatar } from 'antd';
 import TypographyWrapper from '@components/shared/typography-wrapper';
 import StudentTableColumnActions from '@features/students/student-table-column-actions';
 import { Student } from '@models/student-model';
 
 const columns: TableProps<Student>['columns'] = [
   {
-    title: 'Student No',
-    dataIndex: ['studentDetails', 'student_no'],
-    key: 'student_no',
+    title: 'Name',
+    dataIndex: ['studentDetails', 'name'],
+    key: 'name',
     width: 120,
     fixed: 'left',
     render: (_, record) => (
-      <>
-        <Link to={`/students/${record.id}`}>
-          {record.studentDetails?.name}
-        </Link>
-        <Typography.Text type="secondary" copyable style={{display: 'flex', fontSize: 13}}>
-          {record.studentDetails?.student_no}
-        </Typography.Text>
-      </>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Avatar
+          src={`${__IMAGE_BASE_URL__}/uploads/students/${record.studentDetails?.photo}`}
+          alt={record.studentDetails?.name}
+          shape="square"
+          size={50}
+        />
+        <div>
+          <Link to={`/students/${record.id}`}>
+            {record.studentDetails?.name}
+          </Link>
+          <Typography.Text type="secondary" copyable style={{display: 'flex', fontSize: 13}}>
+            {record.studentDetails?.student_no}
+          </Typography.Text>
+        </div>
+      </div>
     )
   },
   {

@@ -158,4 +158,5 @@ export interface StudentFormData {
   permanent_district_id?: number;
   permanent_upazila_id?: number;
   permanent_address?: string;
+  photo?: File | null;
 }

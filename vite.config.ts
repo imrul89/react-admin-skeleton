@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       __API_BASE_URL__: JSON.stringify(env.VITE_API_BASE_URL),
+      __IMAGE_BASE_URL__: JSON.stringify(env.VITE_IMAGE_BASE_URL),
       __APP_CODE__: JSON.stringify(env.VITE_APP_CODE),
       __APP_TITLE__: JSON.stringify(env.VITE_APP_TITLE),
     },

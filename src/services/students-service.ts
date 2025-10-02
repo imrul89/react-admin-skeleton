@@ -1,4 +1,4 @@
-import { Student, Students, StudentRequestData } from '@models/student-model';
+import { Student, Students } from '@models/student-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 
@@ -18,15 +18,15 @@ export const studentsService = baseService.injectEndpoints({
       }),
       providesTags: ['student']
     }),
-    studentSaved: builder.mutation<Student, StudentRequestData>({
-      query: (studentData) => {
+    studentSaved: builder.mutation<Student, { id?: number, formData: FormData }>({
+      query: ({ id, formData }) => {
         const requestUrl = API_END_POINTS.students;
-        const requestMethod = studentData?.student.id ? 'PATCH' : 'POST';
+        const requestMethod = id ? 'PATCH' : 'POST';
 
         return {
           url: requestUrl,
           method: requestMethod,
-          body: studentData
+          body: formData
         };
       },
       invalidatesTags: ['students', 'student']

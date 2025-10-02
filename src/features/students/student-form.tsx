@@ -36,8 +36,16 @@ const StudentForm = ({
     
     studentData.student.id = initialValues?.id || undefined;
     studentData.student.student_details_id = initialValues?.studentDetails?.id || undefined;
+    
+    const formData = new FormData();
+    
+    if (values.photo) {
+      formData.append('photo', values.photo);
+    }
+    
+    formData.append('body', JSON.stringify(studentData));
 
-    onSaved(studentData);
+    onSaved(initialValues?.id, formData);
   };
   
   return (

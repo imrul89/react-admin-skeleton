@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Card, Row, Col, Form, Input, Select, Typography } from 'antd';
+import { Card, Row, Col, Form, Input, Select, Typography, Divider } from 'antd';
+import { EnvironmentOutlined } from '@ant-design/icons';
 import { useDistricts, useUpazilas } from '@hooks/use-locations';
 
 const StudentAddress = ({
@@ -42,14 +43,19 @@ const StudentAddress = ({
   }, [presentDistrictId, permanentDistrictId]);
   
   return (
-    <Card title="Address">
+    <Card title={
+      <span>
+        <EnvironmentOutlined style={{ marginRight: 8 }} />Address
+      </span>
+    }>
       <Row gutter={24}>
-        <Col span={12}>
-          <Typography.Title level={5}>Present Address</Typography.Title>
+        <Col span={24} className="mb-2">
+          <Typography.Title level={5} className="!font-medium">Present Address</Typography.Title>
+        </Col>
+        <Col span={8}>
           <Form.Item
             label="District"
             name="present_district_id"
-            className="mt-4"
             rules={[{ required: true, message: 'Please select present district' }]}
           >
             <Select
@@ -62,6 +68,8 @@ const StudentAddress = ({
               allowClear
             />
           </Form.Item>
+        </Col>
+        <Col span={8}>
           <Form.Item
             label="Upazila"
             name="present_upazila_id"
@@ -76,21 +84,27 @@ const StudentAddress = ({
               allowClear
             />
           </Form.Item>
+        </Col>
+        <Col span={8}>
           <Form.Item
             label="Address"
             name="present_address"
             rules={[{ required: true, message: 'Please enter present address' }]}
-            style={{ marginBottom: 0 }}
           >
             <Input placeholder="Address" />
           </Form.Item>
         </Col>
-        <Col span={12}>
-          <Typography.Title level={5}>Permanent Address</Typography.Title>
+      </Row>
+      <Divider className="!mt-0 mb-2" />
+      <Row gutter={24}>
+        <Col span={24} className="mb-2">
+          <Typography.Title level={5} className="!font-medium">Permanent Address</Typography.Title>
+        </Col>
+        <Col span={8}>
           <Form.Item
             label="District"
             name="permanent_district_id"
-            className="mt-4"
+            className="!mb-0"
           >
             <Select
               loading={isDistrictLoading}
@@ -102,9 +116,12 @@ const StudentAddress = ({
               allowClear
             />
           </Form.Item>
+        </Col>
+        <Col span={8}>
           <Form.Item
             label="Upazila"
             name="permanent_upazila_id"
+            className="!mb-0"
           >
             <Select
               loading={isUpazilaLoading2}
@@ -115,10 +132,12 @@ const StudentAddress = ({
               allowClear
             />
           </Form.Item>
+        </Col>
+        <Col span={8}>
           <Form.Item
             label="Address"
             name="permanent_address"
-            style={{ marginBottom: 0 }}
+            className="!mb-0"
           >
             <Input placeholder="Address" />
           </Form.Item>
