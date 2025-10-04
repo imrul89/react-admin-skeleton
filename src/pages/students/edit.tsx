@@ -22,7 +22,7 @@ const StudentEdit = () => {
       );
     }
   }, [isLoading, student]);
-
+  
   return (
     <>
       <PageHeader

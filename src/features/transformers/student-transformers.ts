@@ -39,15 +39,18 @@ export const transformedToRequestData = (student: StudentFormData): StudentReque
           upazila_id: student.present_upazila_id,
           address: student.present_address
         },
-        type: '1'
+        type: 1
       },
-      {
-        address: {
-          upazila_id: student.permanent_upazila_id,
-          address: student.permanent_address
-        },
-        type: '2'
-      }
+      ...(student.permanent_upazila_id
+        ? [{
+            address: {
+              upazila_id: student.permanent_upazila_id,
+              address: student.permanent_address
+            },
+            type: 2
+          }]
+        : []
+      )
     ]
   };
 };
@@ -60,6 +63,8 @@ export const transformedToFormData = (student: Student): StudentFormData => {
   const permanentAddress = student.studentDetails?.studentAddresses?.find(a => a.type === '2')?.address;
   
   return {
+    id: student.id,
+    student_details_id: student.student_details_id,
     name: student.studentDetails?.name,
     class_id: student.class_id,
     roll: student.roll,
@@ -68,6 +73,7 @@ export const transformedToFormData = (student: Student): StudentFormData => {
     dob: student.studentDetails?.dob ? dayjs(student.studentDetails?.dob, 'YYYY-MM-DD') : null,
     blood_group: student.studentDetails?.blood_group,
     mobile_no: student.studentDetails?.mobile_no,
+    photo_url: student.studentDetails?.photo ? __IMAGE_BASE_URL__ + '/uploads/students/' + student.studentDetails.photo : undefined,
     father_name: father?.name,
     father_mobile_no: father?.mobile_no,
     father_occupation_id: father?.occupation_id,

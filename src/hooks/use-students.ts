@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { App } from 'antd';
 import useFilter from '@hooks/utility-hooks/use-filter';
-import { StudentRequestData } from '@models/student-model';
 import { AppError, Option, QueryParams } from '@models/utils-model';
 import {
   useStudentsQuery,
@@ -77,11 +76,12 @@ export const useStudentForm = () => {
 };
 
 export const useStudent = (studentId: number) => {
-  const { isLoading, data: student } = useStudentQuery(studentId);
+  const { isLoading, data: student, isSuccess } = useStudentQuery(studentId);
 
   return {
     isLoading,
-    student
+    student,
+    isSuccess
   };
 };
 

@@ -91,7 +91,7 @@ const StudentAddress = ({
             name="present_address"
             rules={[{ required: true, message: 'Please enter present address' }]}
           >
-            <Input placeholder="Address" />
+            <Input placeholder="Address" disabled={!form.getFieldValue('present_upazila_id')} />
           </Form.Item>
         </Col>
       </Row>
@@ -139,7 +139,7 @@ const StudentAddress = ({
             name="permanent_address"
             className="!mb-0"
           >
-            <Input placeholder="Address" />
+            <Input placeholder="Address" disabled={!form.getFieldValue('permanent_upazila_id')} />
           </Form.Item>
         </Col>
       </Row>

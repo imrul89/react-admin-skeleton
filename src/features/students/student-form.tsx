@@ -7,10 +7,10 @@ import StudentParents from '@features/students/components/student-parents';
 import { transformedToRequestData } from '@features/transformers/student-transformers';
 import { useStudentForm } from '@hooks/use-students';
 import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
-import { StudentFormData, StudentPartial } from '@models/student-model';
+import { StudentFormData } from '@models/student-model';
 
 interface StudentFormProps {
-  initialValues?: StudentPartial;
+  initialValues?: StudentFormData;
   isEditMode?: boolean;
 }
 
@@ -35,7 +35,7 @@ const StudentForm = ({
     const studentData = transformedToRequestData(values);
     
     studentData.student.id = initialValues?.id || undefined;
-    studentData.student.student_details_id = initialValues?.studentDetails?.id || undefined;
+    studentData.student.student_details_id = initialValues?.student_details_id || undefined;
     
     const formData = new FormData();
     
@@ -56,7 +56,7 @@ const StudentForm = ({
       initialValues={initialValues}
       onFinish={onFinished}
     >
-      <StudentBasicInfo />
+      <StudentBasicInfo photoUrl={initialValues?.photo_url} />
       
       <StudentParents />
       

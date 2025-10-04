@@ -5,7 +5,11 @@ import { useClassOptions } from '@hooks/use-school-classes';
 import { BLOOD_GROUPS, RELIGIONS } from '@utils/constants';
 import { validationMessage } from '@utils/helpers/message-helpers';
 
-const StudentBasicInfo = () => {
+const StudentBasicInfo = ({
+  photoUrl = ''
+}: {
+  photoUrl?: string;
+}) => {
   const { isClassOptionLoading, classOptions } = useClassOptions();
   
   return (
@@ -134,7 +138,7 @@ const StudentBasicInfo = () => {
           <Form.Item label=" " className="!mb-0">
             <ImageCropper
               fieldName="photo"
-              previewImageSrc=""
+              previewImageSrc={photoUrl}
             />
           </Form.Item>
         </Col>

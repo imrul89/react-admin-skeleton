@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Dropdown, Modal } from 'antd';
 import type { MenuProps } from 'antd';
-import { DeleteOutlined, EditOutlined, MoreOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, MoreOutlined, EyeOutlined } from '@ant-design/icons';
 import { Student } from '@models/student-model';
 
 interface StudentTableColumnActionsProps {
@@ -14,9 +14,16 @@ const StudentTableColumnActions = ({ student }: StudentTableColumnActionsProps) 
 
   const items: MenuProps['items'] = [
     {
+      key: `view-${student.id}`,
+      icon: <EyeOutlined />,
+      label: <Link to={`/students/${student.id}`}>
+        View Details
+      </Link>
+    },
+    {
       key: `edit-${student.id}`,
       icon: <EditOutlined />,
-      label: <Link to={`/students/${student.id}`}>
+      label: <Link to={`/students/${student.id}/edit`}>
         Edit
       </Link>
     },

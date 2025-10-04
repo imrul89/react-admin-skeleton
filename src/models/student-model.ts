@@ -97,47 +97,28 @@ export interface StudentRequestData {
     blood_group?: string;
     mobile_no?: string;
   },
-  parents: [
-    {
-      parent: {
-        id?: number;
-        name?: string;
-        mobile_no?: string;
-        occupation_id?: number;
-      },
-      relationship: 'Father';
+  parents: {
+    parent: {
+      id?: number;
+      name?: string;
+      mobile_no?: string;
+      occupation_id?: number;
     },
-    {
-      parent: {
-        id?: number;
-        name?: string;
-        mobile_no?: string;
-        occupation_id?: number;
-      },
-      relationship: 'Mother';
-    }
-  ],
-  addresses: [
-    {
-      address: {
-        id?: number;
-        upazila_id?: number;
-        address?: string;
-      },
-      type: '1';
+    relationship: string;
+  }[],
+  addresses: {
+    address: {
+      id?: number;
+      upazila_id?: number;
+      address?: string;
     },
-    {
-      address: {
-        id?: number;
-        upazila_id?: number;
-        address?: string;
-      },
-      type: '2';
-    }
-  ];
+    type: number;
+  }[];
 }
 
 export interface StudentFormData {
+  id?: number;
+  student_details_id?: number;
   name?: string;
   class_id?: number;
   roll?: number;
@@ -159,4 +140,5 @@ export interface StudentFormData {
   permanent_upazila_id?: number;
   permanent_address?: string;
   photo?: File | null;
+  photo_url?: string;
 }

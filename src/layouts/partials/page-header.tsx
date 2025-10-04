@@ -21,7 +21,7 @@ const PageHeader = ({
         <Row>
           <Col span={24}>
             <Flex justify="space-between" align="center">
-              <Typography.Title level={2} style={{ marginBottom: 0 }}>
+              <Typography.Title level={4} style={{ marginBottom: 0 }}>
                 {title}
               </Typography.Title>
               <div className="text-right">

@@ -13,6 +13,7 @@ import Profile from '@pages/settings';
 import Students from '@pages/students';
 import StudentCreate from '@pages/students/create';
 import StudentEdit from '@pages/students/edit';
+import StudentView from '@pages/students/view';
 import Users from '@pages/users';
 import UserCreate from '@pages/users/create';
 import UserEdit from '@pages/users/edit';
@@ -167,6 +168,12 @@ const routes = [
       },
       {
         path: ':id',
+        breadcrumb: 'Student Details',
+        component: StudentView,
+        exact: true
+      },
+      {
+        path: ':id/edit',
         breadcrumb: 'Edit Student',
         component: StudentEdit,
         exact: true
