@@ -25,7 +25,6 @@ const StudentView = () => {
     <>
       <PageHeader
         title="Student Details"
-        subTitle="Manage student details"
       >
         <Link to={`/students/${studentDetails.id}/edit`}>
           <Button type="primary" icon={<EditOutlined />}>

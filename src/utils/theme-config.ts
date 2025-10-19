@@ -1,5 +1,6 @@
 export const themeConfig = {
   token: {
+    fontFamily: 'Nunito',
     colorBorder: '#F0F0F0',
   },
   components: {

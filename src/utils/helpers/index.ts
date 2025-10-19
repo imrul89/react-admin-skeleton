@@ -1,6 +1,7 @@
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SorterResult } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
 import _ from 'lodash';
 import React from 'react';
 import { message } from 'antd';
@@ -9,8 +10,17 @@ import {
   PreparedOption,
   QueryParams
 } from '@models/utils-model';
+import { DEFAULT_DISPLAY_DATE_FORMAT } from '@utils/constants';
 
 export const isProd = import.meta.env.MODE === 'production';
+
+export const dateFormat = (date: string) => {
+  return dayjs(date).format(DEFAULT_DISPLAY_DATE_FORMAT);
+};
+
+export const getMonthName = (month: number) => {
+  return dayjs().month(month - 1).format('MMMM');
+};
 
 export const isJsonString = (value: string) => {
   try {

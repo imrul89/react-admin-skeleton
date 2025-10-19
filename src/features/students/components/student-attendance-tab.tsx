@@ -1,8 +1,8 @@
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { Card, Table, Button, Tag, Typography, Row, Col, Statistic, DatePicker, Select, Space } from 'antd';
 import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Student } from '@models/student-model';
-import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -145,7 +145,7 @@ const StudentAttendanceTab = ({ student }: StudentAttendanceTabProps) => {
       {/* Attendance Summary */}
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={6}>
-          <Card>
+          <Card className="!bg-gray-50" bordered={false}>
             <Statistic
               title="Total Days"
               value={totalDays}
@@ -180,9 +180,9 @@ const StudentAttendanceTab = ({ student }: StudentAttendanceTabProps) => {
               title="Attendance %"
               value={attendancePercentage}
               suffix="%"
-              valueStyle={{ 
-                color: attendancePercentage >= 80 ? '#52c41a' : 
-                       attendancePercentage >= 60 ? '#faad14' : '#ff4d4f' 
+              valueStyle={{
+                color: attendancePercentage >= 80 ? '#52c41a' :
+                       attendancePercentage >= 60 ? '#faad14' : '#ff4d4f'
               }}
             />
           </Card>

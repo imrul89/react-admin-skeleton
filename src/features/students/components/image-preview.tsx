@@ -45,6 +45,7 @@ const ImagePreview = ({
           }}
           src={previewSrc}
           onError={handleError}
+          className="rounded-lg"
         />
       </Flex>
     </Flex>

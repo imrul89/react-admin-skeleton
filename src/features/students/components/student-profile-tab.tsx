@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Row, Col, Typography, Descriptions, Divider, Tag } from 'antd';
+import { Row, Col, Typography, Descriptions, Divider } from 'antd';
 import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 import { Student } from '@models/student-model';
 import { RELIGIONS } from '@utils/constants';
@@ -20,27 +20,25 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
   
   return (
     <div className="space-y-6 px-2">
-      <Row gutter={[24, 24]}>
+      <Row gutter={[24, 24]} className="!mt-1">
         <Col xs={24} md={12}>
           <Descriptions column={1} size="small">
             <Descriptions.Item label="Class">
-              <Tag color="blue">{student.class?.title}</Tag>
+              {student.class?.title}
             </Descriptions.Item>
             <Descriptions.Item label="Roll">
               {student.roll || 'N/A'}
             </Descriptions.Item>
             <Descriptions.Item label="Gender">
-              <Tag color={studentDetails?.gender === 'Male' ? 'blue' : 'pink'}>
-                {studentDetails?.gender}
-              </Tag>
+              {studentDetails?.gender}
+            </Descriptions.Item>
+            <Descriptions.Item label="Date of Birth">
+              {studentDetails?.dob ? dayjs(studentDetails.dob).format('DD MMM YYYY') : 'N/A'}
             </Descriptions.Item>
           </Descriptions>
         </Col>
         <Col xs={24} md={12}>
           <Descriptions column={1} size="small">
-            <Descriptions.Item label="Date of Birth">
-              {studentDetails?.dob ? dayjs(studentDetails.dob).format('DD MMM YYYY') : 'N/A'}
-            </Descriptions.Item>
             <Descriptions.Item label="Blood Group">
               {studentDetails?.blood_group || 'N/A'}
             </Descriptions.Item>
@@ -56,7 +54,7 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
       <Divider />
       <Row gutter={[24, 24]}>
         <Col xs={24} md={12}>
-          <Title level={5} className="mb-3 flex items-center">
+          <Title level={5} className="!mb-4 flex items-center">
             <UserOutlined className="mr-2" />
             Father Information
           </Title>
@@ -80,7 +78,7 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
           )}
         </Col>
         <Col xs={24} md={12}>
-          <Title level={5} className="mb-3 flex items-center">
+          <Title level={5} className="!mb-4 flex items-center">
             <UserOutlined className="mr-2" />
             Mother Information
           </Title>
@@ -107,7 +105,7 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
       <Divider />
       <Row gutter={[24, 24]}>
         <Col xs={24} md={12}>
-          <Title level={5} className="mb-3 flex items-center">
+          <Title level={5} className="!mb-4 flex items-center">
             <HomeOutlined className="mr-2" />
             Present Address
           </Title>
@@ -122,7 +120,7 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
           )}
         </Col>
         <Col xs={24} md={12}>
-          <Title level={5} className="mb-3 flex items-center">
+          <Title level={5} className="!mb-4 flex items-center">
             <HomeOutlined className="mr-2" />
             Permanent Address
           </Title>

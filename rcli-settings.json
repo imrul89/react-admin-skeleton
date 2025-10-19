@@ -1,5 +1,5 @@
 {
-  "moduleName": "SchoolClass",
+  "moduleName": "TuitionFeeHead",
   "options": {
     "fields": [
       {
@@ -8,19 +8,14 @@
         "required": true
       },
       {
-        "name": "code",
+        "name": "type",
         "type": "string",
         "required": true
       },
       {
         "name": "serial",
         "type": "number",
-        "required": false
-      },
-      {
-        "name": "coaching_applicable",
-        "type": "string",
-        "required": false
+        "required": true
       }
     ]
   }

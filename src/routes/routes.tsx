@@ -14,6 +14,10 @@ import Students from '@pages/students';
 import StudentCreate from '@pages/students/create';
 import StudentEdit from '@pages/students/edit';
 import StudentView from '@pages/students/view';
+import TuitionFeeHeads from '@pages/tuition-fee-heads';
+import TuitionFeeHeadCreate from '@pages/tuition-fee-heads/create';
+import TuitionFeeHeadEdit from '@pages/tuition-fee-heads/edit';
+import TuitionFeeHeadSettings from '@pages/tuition-fee-heads/settings';
 import Users from '@pages/users';
 import UserCreate from '@pages/users/create';
 import UserEdit from '@pages/users/edit';
@@ -176,6 +180,38 @@ const routes = [
         path: ':id/edit',
         breadcrumb: 'Edit Student',
         component: StudentEdit,
+        exact: true
+      }
+    ]
+  },
+  {
+    path: 'tuition-fee-heads',
+    breadcrumb: 'Tuition Fee Heads',
+    component: '',
+    exact: true,
+    children: [
+      {
+        path: '',
+        breadcrumb: 'Tuition Fee Heads',
+        component: TuitionFeeHeads,
+        exact: true
+      },
+      {
+        path: 'create',
+        breadcrumb: 'Create Tuition Fee Head',
+        component: TuitionFeeHeadCreate,
+        exact: true
+      },
+      {
+        path: 'settings',
+        breadcrumb: 'Tuition Fee Head Settings',
+        component: TuitionFeeHeadSettings,
+        exact: true
+      },
+      {
+        path: ':id',
+        breadcrumb: 'Edit Tuition Fee Head',
+        component: TuitionFeeHeadEdit,
         exact: true
       }
     ]

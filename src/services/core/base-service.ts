@@ -20,6 +20,12 @@ const baseService = createApi({
     'school-class',
     'students',
     'student',
+    'tuition-fee-heads',
+    'tuition-fee-head',
+    'tuition-fee-payments',
+    'tuition-fee-payment',
+    'tuition-fee-payment-invoices',
+    'tuition-fee-payment-invoice'
 ],
   endpoints: () => ({}),
 });

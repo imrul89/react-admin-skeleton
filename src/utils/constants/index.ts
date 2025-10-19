@@ -1,3 +1,4 @@
+export const DEFAULT_DISPLAY_DATE_FORMAT = 'DD MMM YYYY';
 export const DEFAULT_DISPLAY_DATE_TIME_FORMAT = 'DD-MM-YYYY HH:mm';
 
 export const MODAL_SIZES = {
@@ -80,3 +81,33 @@ export const OCCUPATIONS = [
   { value: 16, label: 'Unemployed' },
   { value: 17, label: 'Other' }
 ];
+
+export const PAYMENT_INVOICE_TYPES = {
+  SCHOOL: 1,
+  COACHING: 2,
+  HOSTEL: 3,
+  OTHERS: 4
+};
+
+export const TUITION_FEE_HEAD_TYPES = [
+  { value: 1, label: 'School' },
+  { value: 2, label: 'Coaching' },
+  { value: 4, label: 'Other' }
+];
+
+export const MONTHS = [
+  { value: 1, label: 'January' },
+  { value: 2, label: 'February' },
+  { value: 3, label: 'March' },
+  { value: 4, label: 'April' },
+  { value: 5, label: 'May' },
+  { value: 6, label: 'June' },
+  { value: 7, label: 'July' },
+  { value: 8, label: 'August' },
+  { value: 9, label: 'September' },
+  { value: 10, label: 'October' },
+  { value: 11, label: 'November' },
+  { value: 12, label: 'December' }
+];
+
+export const CURRENCY_SYMBOL = '৳';

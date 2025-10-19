@@ -4,6 +4,14 @@
     width: 100%;
 }
 
+.small-table-action-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    zIndex: 2;
+}
+
 .grid-action {
     min-width: 170px !important;
     text-align: left !important;
@@ -89,6 +97,11 @@
 .logo {
     width: 200px !important;
     height: 35px !important;
+}
+
+.no-last-border :where(.ant-table-tbody) > tr.ant-table-row:last-of-type > td {
+    border-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {

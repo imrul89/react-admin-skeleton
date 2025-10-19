@@ -13,12 +13,14 @@ const columns: TableProps<Student>['columns'] = [
     fixed: 'left',
     render: (_, record) => (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Avatar
-          src={`${__IMAGE_BASE_URL__}/uploads/students/${record.studentDetails?.photo}`}
-          alt={record.studentDetails?.name}
-          shape="square"
-          size={50}
-        />
+        <Link to={`/students/${record.id}`}>
+          <Avatar
+            src={`${__IMAGE_BASE_URL__}/uploads/students/${record.studentDetails?.photo}`}
+            alt={record.studentDetails?.name}
+            shape="circle"
+            size={50}
+          />
+        </Link>
         <div>
           <Link to={`/students/${record.id}`}>
             {record.studentDetails?.name}

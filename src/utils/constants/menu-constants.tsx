@@ -42,4 +42,21 @@ export const MAIN_MENU_ITEMS = [
     label: <MenuLink to={'/students'}>Students</MenuLink>,
     icon: <UserOutlined />
   },
+  {
+    key: 'tuition-fee-heads',
+    label: <MenuLink to={'tuition-fee-heads'}>Tuition Fee Heads</MenuLink>,
+    icon: <UserOutlined />,
+    children: [
+      {
+        key: '/tuition-fee-heads',
+        label: <MenuLink to={'/tuition-fee-heads'}>Fee Heads</MenuLink>,
+        icon: <UserOutlined />
+      },
+      {
+        key: '/tuition-fee-heads/settings',
+        label: <MenuLink to={'/tuition-fee-heads/settings'}>Settings</MenuLink>,
+        icon: <UserOutlined />
+      }
+    ]
+  },
 ];
