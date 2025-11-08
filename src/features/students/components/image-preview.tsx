@@ -27,7 +27,7 @@ const ImagePreview = ({
   return (
     <Flex
       className="relative border border-dashed border-[#F0F0F0]
-       bg-[#FAFAFA] p-2 rounded-md h-[290px]"
+       bg-[#FAFAFA] p-2 rounded-md h-[200px]"
       justify="center"
       vertical
     >

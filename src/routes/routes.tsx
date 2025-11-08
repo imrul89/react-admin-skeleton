@@ -10,6 +10,7 @@ import SchoolClasses from '@pages/school-classes';
 import SchoolClassCreate from '@pages/school-classes/create';
 import SchoolClassEdit from '@pages/school-classes/edit';
 import Profile from '@pages/settings';
+import Settings from '@pages/settings/settings';
 import Students from '@pages/students';
 import StudentCreate from '@pages/students/create';
 import StudentEdit from '@pages/students/edit';
@@ -64,6 +65,14 @@ const routes = [
     path: 'profile',
     breadcrumb: 'Profile',
     component: Profile,
+    exact: true,
+    children: [
+    ]
+  },
+  {
+    path: 'settings',
+    breadcrumb: 'Settings',
+    component: Settings,
     exact: true,
     children: [
     ]

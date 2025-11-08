@@ -1,7 +1,7 @@
 import ImgCrop from 'antd-img-crop';
 import { useEffect, useState } from 'react';
-import { Form, Upload, type UploadProps } from 'antd';
-import { EditOutlined, FileImageOutlined } from '@ant-design/icons';
+import { Button, Form, Upload, type UploadProps } from 'antd';
+import { CameraOutlined, FileImageOutlined } from '@ant-design/icons';
 import {
   base64ToFile,
   getBase64BlobSize,
@@ -19,90 +19,94 @@ interface ImageUrls {
 
 interface ImageCropperProps {
   fieldName: string;
+  width?: number;
+  height?: number;
   previewImageSrc?: string;
   previewImageUrls?: ImageUrls[];
   setPreviewImageUrls?: (urls: ImageUrls[]) => void;
 }
 
-const IMAGE_ACCEPT_TYPES = ['.jpeg', '.jpg', '.png'];
+const IMAGE_ACCEPT_TYPES = ['.jpeg', '.jpg', '.png', '.ico'];
 const WIDTH = 320;
 const HEIGHT = 350;
 
 const ImageCropper = ({
   fieldName,
+  width = WIDTH,
+  height = HEIGHT,
   previewImageSrc = '',
   previewImageUrls = [],
   setPreviewImageUrls
 }: ImageCropperProps) => {
   const formInstance = Form.useFormInstance();
-  
+
   const [previewImage, setPreviewImage] = useState('');
   const [hasPreviewImage, setHasPreviewImage] = useState(false);
-  
+
   const props: UploadProps = {
     multiple: false,
-    accept: '.jpeg, .jpg, .png',
+    accept: '.jpeg, .jpg, .png, .ico',
     maxCount: 1,
     showUploadList: false,
     beforeUpload: async (file) => {
-      const imageBase64 = await getImageBase64(file as File, WIDTH, HEIGHT);
+      const imageBase64 = await getImageBase64(file as File, width, height);
       const imageSize = getBase64BlobSize(imageBase64);
       const extension = getFileExtension(file);
-      
+
       if (!IMAGE_ACCEPT_TYPES.includes(`.${extension}`)) {
         formInstance.setFields([{
           name: fieldName,
           errors: ['Selected file is not supported']
         }]);
-        
+
         return Upload.LIST_IGNORE;
       }
-      
+
       if (imageSize > (1 * 1024 * 1024)) {
         formInstance.setFields([{
           name: fieldName,
           errors: [`File size should be less than 1MB`]
         }]);
-        
+
         return Upload.LIST_IGNORE;
       }
-      
+
       formInstance.setFieldsValue({
         [fieldName]: base64ToFile(imageBase64, file.name, file.type)
       });
-      
+
       formInstance.setFields([{
         name: fieldName,
         errors: []
       }]);
-      
+
       setPreviewImage(imageBase64);
-      
+
       if (setPreviewImageUrls) {
         setPreviewImageUrls([
           ...previewImageUrls,
           { name: fieldName, url: imageBase64 }
         ]);
       }
-      
+
       return false;
     }
   };
-  
+
   const onRemoveImage = () => {
     setPreviewImage('');
-    
+
     setPreviewImageUrls?.(previewImageUrls.filter((url) => url.name !== fieldName));
     formInstance.resetFields([fieldName]);
   };
-  
+
   useEffect(() => {
     if (previewImageSrc) {
       setPreviewImage(previewImageSrc);
       setHasPreviewImage(true);
     }
   }, [previewImageSrc]);
-  
+
   return (
     <Form.Item
       name={`${fieldName}`}
@@ -118,13 +122,17 @@ const ImageCropper = ({
           {hasPreviewImage && (
             <ImgCrop
               quality={1}
-              aspect={WIDTH / HEIGHT}
+              aspect={width / height}
               modalTitle="Crop Image"
               // eslint-disable-next-line require-await
               beforeCrop={async (file) => {
                 const extension = getFileExtension(file);
-                
+
                 if (!IMAGE_ACCEPT_TYPES.includes(`.${extension}`)) {
+                  return false;
+                }
+                
+                if (extension === 'ico') {
                   return false;
                 }
 
@@ -132,8 +140,10 @@ const ImageCropper = ({
               }}
             >
               <Upload {...props}>
-                <div className="absolute right-4 top-3 cursor-pointer">
-                  <EditOutlined />
+                <div className="absolute right-4 top-3">
+                  <Button color="primary" variant="filled" shape="circle">
+                    <CameraOutlined />
+                  </Button>
                 </div>
               </Upload>
             </ImgCrop>
@@ -142,12 +152,16 @@ const ImageCropper = ({
       ) : (
         <ImgCrop
           quality={1}
-          aspect={WIDTH / HEIGHT}
+          aspect={width / height}
           modalTitle="Crop Image"
           beforeCrop={(file) => {
             const extension = getFileExtension(file);
-            
+
             if (!IMAGE_ACCEPT_TYPES.includes(`.${extension}`)) {
+              return false;
+            }
+            
+            if (extension === 'ico') {
               return false;
             }
 
@@ -155,7 +169,7 @@ const ImageCropper = ({
           }}
         >
           <Dragger {...props}>
-            <div className="h-[255px] flex flex-col justify-center items-center">
+            <div className="h-[200px] flex flex-col justify-center items-center">
               <p className="ant-upload-drag-icon">
                 <FileImageOutlined />
               </p>
@@ -164,7 +178,7 @@ const ImageCropper = ({
               </p>
               <p className="ant-upload-hint">Supported formats: .jpeg, .jpg, .png</p>
               <p className="ant-upload-hint">
-                Dimension: {WIDTH} x {HEIGHT} px
+                Dimension: {width} x {height} px
               </p>
               <p className="ant-upload-hint">
                 Max. file size: 1MB

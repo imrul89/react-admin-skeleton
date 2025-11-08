@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Avatar, Dropdown, Flex, MenuProps, Typography } from 'antd';
+import { Avatar, Button, Dropdown, Flex, MenuProps, Typography } from 'antd';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { logOut } from '@reducers/auth-slice';
 import { unsetUser } from '@reducers/user-slice';
@@ -38,30 +38,34 @@ const ProfileMenu = () => {
   ];
   
   return (
-    <Dropdown
-      menu={{items}}
-      trigger={['click']}
-      overlayStyle={{ minWidth: 170 }}
-    >
-      <Flex
-        gap={16}
-        justify="center"
-        align="center"
-        className="px-4 py-2 cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#011f49] rounded"
+    <Flex gap={10} align="center">
+      <Button type="dashed">{user.year}</Button>
+      
+      <Dropdown
+        menu={{items}}
+        trigger={['click']}
+        overlayStyle={{ minWidth: 170, zIndex: 99999 }}
       >
-        <Avatar className="bg-gray-100">
-          <UserOutlined className="text-[#001529] text-[16px]" />
-        </Avatar>
-        <Flex vertical>
-          <Typography.Text style={{color: '#ddd'}}>
-            { user.name }
-          </Typography.Text>
-          <Typography.Text style={{color: '#ddd'}}>
-            { user.username }
-          </Typography.Text>
+        <Flex
+          gap={16}
+          justify="center"
+          align="center"
+          className="!p-2 !py-1 cursor-pointer transition-all duration-300 ease-in-out hover:bg-white rounded"
+        >
+          <Avatar size="large" style={{ backgroundColor: '#fde3cf', color: '#f56a00' }}>
+            <UserOutlined className="text-[#001529] text-[16px]" />
+          </Avatar>
+          <Flex vertical>
+            <Typography.Text className="!text-gray-600 font-semibold !text-[14px] !mb-0">
+              { user.name }
+            </Typography.Text>
+            <Typography.Text className="!text-gray-500 !text-[13px]">
+              { user.username }
+            </Typography.Text>
+          </Flex>
         </Flex>
-      </Flex>
-    </Dropdown>
+      </Dropdown>
+    </Flex>
   );
 };
 

@@ -2,6 +2,7 @@ export const themeConfig = {
   token: {
     fontFamily: 'Nunito',
     colorBorder: '#F0F0F0',
+    primaryColor: '#00b96b'
   },
   components: {
     Collapse: {

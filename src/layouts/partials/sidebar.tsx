@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Layout } from 'antd';
 import MainMenu from '@layouts/partials/main-menu';
-
-const { Sider } = Layout;
 
 const Sidebar = () => {
   const location = useLocation();
@@ -20,21 +17,10 @@ const Sidebar = () => {
   }, [location]);
   
   return (
-    <Sider
-      width={275}
-      style={{
-        position: 'fixed',
-        zIndex: 100,
-        background: 'white',
-        height: '100vh',
-        paddingTop: '20px'
-    }}
-    >
-      <MainMenu
-        activeMenu={activeMainMenu}
-        onMenuClick={handleMainMenuClick}
-      />
-    </Sider>
+    <MainMenu
+      activeMenu={activeMainMenu}
+      onMenuClick={handleMainMenuClick}
+    />
   );
 };
 

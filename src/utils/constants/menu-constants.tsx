@@ -1,6 +1,6 @@
 import {
   DashboardOutlined, KeyOutlined, UsergroupAddOutlined,
-  UserOutlined
+  UserOutlined, SettingOutlined
 } from '@ant-design/icons';
 import { MenuLink } from '@layouts/partials/menu-link';
 
@@ -58,5 +58,10 @@ export const MAIN_MENU_ITEMS = [
         icon: <UserOutlined />
       }
     ]
+  },
+  {
+    key: '/settings',
+    label: <MenuLink to={'/settings'}>System Settings</MenuLink>,
+    icon: <SettingOutlined />
   },
 ];

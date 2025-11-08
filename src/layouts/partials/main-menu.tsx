@@ -65,7 +65,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ activeMenu }) => {
   
   return (
     <Menu
-      theme="light"
+      theme="dark"
       mode="inline"
       className="main-menu"
       selectedKeys={[selectedKey]}
