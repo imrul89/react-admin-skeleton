@@ -75,7 +75,7 @@ const DefaultLayout = () => {
             style={{
               position: 'sticky',
               top: 0,
-              zIndex: 9999,
+              zIndex: 99,
               width: '100%',
               display: 'flex',
               alignItems: 'center',

@@ -42,7 +42,6 @@ const UserTable = () => {
             pagination={false}
             onChange={sortTableColumn}
             rowKey="id"
-            bordered
             sticky={{ offsetHeader: 64 }}
           />
           <div className={'flex justify-end mt-4'}>

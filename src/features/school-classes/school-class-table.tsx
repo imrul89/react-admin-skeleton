@@ -43,7 +43,6 @@ const SchoolClassTable = () => {
             pagination={false}
             onChange={sortTableColumn}
             rowKey="id"
-            bordered
           />
           <div className="flex justify-end mt-4">
             <PaginationWrapper totalItems={data?.totalNumberOfRows || 0} />

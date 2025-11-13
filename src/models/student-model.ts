@@ -142,3 +142,9 @@ export interface StudentFormData {
   photo?: File | null;
   photo_url?: string;
 }
+
+export interface StudentSettingsUpdateRequest {
+  status_id: number;
+  coaching_off: string;
+  discount_on_coaching: number;
+}

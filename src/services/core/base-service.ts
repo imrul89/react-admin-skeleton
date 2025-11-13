@@ -28,6 +28,7 @@ const baseService = createApi({
     'tuition-fee-payment-invoice',
     'settings',
     'setting',
+    'attendance',
   ],
   endpoints: () => ({}),
 });

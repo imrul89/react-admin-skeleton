@@ -15,10 +15,13 @@ import Students from '@pages/students';
 import StudentCreate from '@pages/students/create';
 import StudentEdit from '@pages/students/edit';
 import StudentView from '@pages/students/view';
+import PromoteStudents from '@pages/students/promote';
 import TuitionFeeHeads from '@pages/tuition-fee-heads';
 import TuitionFeeHeadCreate from '@pages/tuition-fee-heads/create';
 import TuitionFeeHeadEdit from '@pages/tuition-fee-heads/edit';
 import TuitionFeeHeadSettings from '@pages/tuition-fee-heads/settings';
+import Attendance from '@pages/attendance';
+import CreateAttendance from '@pages/attendance/create';
 import Users from '@pages/users';
 import UserCreate from '@pages/users/create';
 import UserEdit from '@pages/users/edit';
@@ -180,6 +183,12 @@ const routes = [
         exact: true
       },
       {
+        path: 'promote',
+        breadcrumb: 'Promote Students',
+        component: PromoteStudents,
+        exact: true
+      },
+      {
         path: ':id',
         breadcrumb: 'Student Details',
         component: StudentView,
@@ -221,6 +230,26 @@ const routes = [
         path: ':id',
         breadcrumb: 'Edit Tuition Fee Head',
         component: TuitionFeeHeadEdit,
+        exact: true
+      }
+    ]
+  },
+  {
+    path: 'attendance',
+    breadcrumb: 'Attendance',
+    component: '',
+    exact: true,
+    children: [
+      {
+        path: '',
+        breadcrumb: 'Attendance',
+        component: Attendance,
+        exact: true
+      },
+      {
+        path: 'create',
+        breadcrumb: 'Mark Attendance',
+        component: CreateAttendance,
         exact: true
       }
     ]

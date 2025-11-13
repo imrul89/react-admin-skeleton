@@ -74,7 +74,6 @@ const TableSkeleton = ({ className }: { className?: string }) => {
       {tableData && (
         <Table
           sticky
-          bordered
           className="h-[350px)]"
           pagination={false}
           columns={columns}

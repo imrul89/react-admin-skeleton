@@ -25,7 +25,7 @@ const columns: TableProps<Student>['columns'] = [
           <Link to={`/students/${record.id}`}>
             {record.studentDetails?.name}
           </Link>
-          <Typography.Text type="secondary" copyable style={{display: 'flex', fontSize: 13}}>
+          <Typography.Text type="secondary" copyable style={{display: 'flex', fontSize: 12}}>
             {record.studentDetails?.student_no}
           </Typography.Text>
         </div>

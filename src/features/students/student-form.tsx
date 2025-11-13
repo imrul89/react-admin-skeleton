@@ -45,7 +45,7 @@ const StudentForm = ({
     
     formData.append('body', JSON.stringify(studentData));
 
-    onSaved(initialValues?.id, formData);
+    onSaved(formData, initialValues?.id);
   };
   
   return (

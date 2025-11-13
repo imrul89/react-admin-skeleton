@@ -110,4 +110,20 @@ export const MONTHS = [
   { value: 12, label: 'December' }
 ];
 
+export const ATTENDANCE_FOR = [
+  { value: 1, label: 'School' },
+  { value: 2, label: 'Coaching' }
+];
+
+export const ATTENDANCE_STATUS = {
+  present: {
+    value: 1,
+    label: 'Present'
+  },
+  absent: {
+    value: 0,
+    label: 'Absent'
+  }
+};
+
 export const CURRENCY_SYMBOL = '৳';

@@ -1,4 +1,4 @@
-import { Student, Students } from '@models/student-model';
+import { Student, Students, StudentSettingsUpdateRequest } from '@models/student-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 
@@ -31,9 +31,29 @@ export const studentsService = baseService.injectEndpoints({
       },
       invalidatesTags: ['students', 'student']
     }),
+    updateStudentSettings: builder.mutation<Student, { id: number, data: StudentSettingsUpdateRequest }>({
+      query: ({ id, data }) => ({
+        url: `${API_END_POINTS.students}/student-settings/${id}`,
+        method: 'PATCH',
+        body: data
+      }),
+      invalidatesTags: ['students', 'student']
+    }),
     searchStudents: builder.query<Students, string>({
       query: (searchQuery) => ({
         url: `${API_END_POINTS.students}?limit=500&offset=0&search=${searchQuery}`,
+        method: 'GET'
+      })
+    }),
+    classWiseStudents: builder.query<{
+      id: number;
+      studentDetails: {
+        name: string;
+      };
+      roll: number;
+    }[], { classId: number }>({
+      query: ({ classId }) => ({
+        url: `${API_END_POINTS.students}/class-wise-students/${classId}`,
         method: 'GET'
       })
     })
@@ -44,5 +64,7 @@ export const {
   useStudentsQuery,
   useStudentQuery,
   useLazySearchStudentsQuery,
-  useStudentSavedMutation
+  useStudentSavedMutation,
+  useUpdateStudentSettingsMutation,
+  useLazyClassWiseStudentsQuery
 } = studentsService;

@@ -1,6 +1,6 @@
 import {
   DashboardOutlined, KeyOutlined, UsergroupAddOutlined,
-  UserOutlined, SettingOutlined
+  UserOutlined, SettingOutlined, CalendarOutlined
 } from '@ant-design/icons';
 import { MenuLink } from '@layouts/partials/menu-link';
 
@@ -38,13 +38,25 @@ export const MAIN_MENU_ITEMS = [
     icon: <UserOutlined />
   },
   {
-    key: '/students',
-    label: <MenuLink to={'/students'}>Students</MenuLink>,
-    icon: <UserOutlined />
+    key: '/manage-students',
+    label: 'Manage Students',
+    icon: <UserOutlined />,
+    children: [
+      {
+        key: '/students',
+        label: <MenuLink to={'/students'}>Students</MenuLink>,
+        icon: <UserOutlined />
+      },
+      {
+        key: '/attendance',
+        label: <MenuLink to={'/attendance'}>Attendance</MenuLink>,
+        icon: <CalendarOutlined />
+      }
+    ]
   },
   {
-    key: 'tuition-fee-heads',
-    label: <MenuLink to={'tuition-fee-heads'}>Tuition Fee Heads</MenuLink>,
+    key: '/manage-tuition-fee',
+    label: 'Manage Tuition Fee',
     icon: <UserOutlined />,
     children: [
       {
