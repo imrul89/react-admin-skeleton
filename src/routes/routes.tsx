@@ -9,6 +9,9 @@ import RolePermissions from '@pages/roles/permissions';
 import SchoolClasses from '@pages/school-classes';
 import SchoolClassCreate from '@pages/school-classes/create';
 import SchoolClassEdit from '@pages/school-classes/edit';
+import Sections from '@pages/sections';
+import SectionCreate from '@pages/sections/create';
+import SectionEdit from '@pages/sections/edit';
 import Profile from '@pages/settings';
 import Settings from '@pages/settings/settings';
 import Students from '@pages/students';
@@ -16,6 +19,7 @@ import StudentCreate from '@pages/students/create';
 import StudentEdit from '@pages/students/edit';
 import StudentView from '@pages/students/view';
 import PromoteStudents from '@pages/students/promote';
+import AssignSections from '@pages/students/assign-sections';
 import TuitionFeeHeads from '@pages/tuition-fee-heads';
 import TuitionFeeHeadCreate from '@pages/tuition-fee-heads/create';
 import TuitionFeeHeadEdit from '@pages/tuition-fee-heads/edit';
@@ -165,6 +169,32 @@ const routes = [
     ]
   },
   {
+    path: 'sections',
+    breadcrumb: 'Sections',
+    component: '',
+    exact: true,
+    children: [
+      {
+        path: '',
+        breadcrumb: 'Sections',
+        component: Sections,
+        exact: true
+      },
+      {
+        path: 'create',
+        breadcrumb: 'Create Section',
+        component: SectionCreate,
+        exact: true
+      },
+      {
+        path: ':id',
+        breadcrumb: 'Edit Section',
+        component: SectionEdit,
+        exact: true
+      }
+    ]
+  },
+  {
     path: 'students',
     breadcrumb: 'Students',
     component: '',
@@ -186,6 +216,12 @@ const routes = [
         path: 'promote',
         breadcrumb: 'Promote Students',
         component: PromoteStudents,
+        exact: true
+      },
+      {
+        path: 'assign-sections',
+        breadcrumb: 'Assign Sections',
+        component: AssignSections,
         exact: true
       },
       {

@@ -1,6 +1,6 @@
 import {
   DashboardOutlined, KeyOutlined, UsergroupAddOutlined,
-  UserOutlined, SettingOutlined, CalendarOutlined
+  UserOutlined, SettingOutlined, CalendarOutlined, AppstoreOutlined
 } from '@ant-design/icons';
 import { MenuLink } from '@layouts/partials/menu-link';
 
@@ -36,6 +36,11 @@ export const MAIN_MENU_ITEMS = [
     key: 'classes',
     label: <MenuLink to={'classes'}>Classes</MenuLink>,
     icon: <UserOutlined />
+  },
+  {
+    key: '/sections',
+    label: <MenuLink to={'/sections'}>Sections</MenuLink>,
+    icon: <AppstoreOutlined />
   },
   {
     key: '/manage-students',

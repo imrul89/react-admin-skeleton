@@ -6,6 +6,7 @@ export const API_END_POINTS = {
   roles: '/v1/roles',
   permissions: '/v1/permissions',
   schoolClasses: '/v1/classes',
+  sections: '/v1/sections',
   students: '/v1/students',
   locations: '/v1/location',
   tuitionFeeHeads: '/v1/tuition-fee-heads',

@@ -19,6 +19,7 @@ export interface Attendances {
 export interface AttendanceQueryParams {
   student_id?: number;
   class_id?: number;
+  section_id?: number;
   roll?: number;
   status?: number;
   attendance_for?: number;
@@ -33,6 +34,7 @@ export interface AttendanceQueryParams {
 
 export interface ClassWiseAttendanceRequest {
   class_id: number;
+  section_id?: number;
   attendance_for: number;
   date: string;
   absent_student_ids: number[];
@@ -62,6 +64,7 @@ export interface UpdateAttendanceRequest {
 
 export interface CheckAttendanceExistsRequest {
   class_id: number;
+  section_id?: number;
   attendance_for: number;
   date: string;
 }

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { SchoolClass } from '@models/school-class-model';
+import { Section } from '@models/section-model';
 
 export interface District {
   id: number;
@@ -61,6 +62,8 @@ export interface Student {
   student_details_id: number;
   year: number;
   class_id: number;
+  section_id?: number;
+  shift_id?: number;
   roll?: number;
   status_id: number;
   coaching_off?: string;
@@ -73,6 +76,7 @@ export interface Student {
   deleted_at?: string;
   studentDetails?: StudentDetails;
   class?: SchoolClass;
+  section?: Section;
 }
 
 export interface Students {
@@ -87,6 +91,7 @@ export interface StudentRequestData {
     id?: number;
     student_details_id?: number;
     class_id?: number;
+    section_id?: number;
     roll?: number;
   },
   studentDetails: {

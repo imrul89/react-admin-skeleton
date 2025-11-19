@@ -56,6 +56,23 @@ export const studentsService = baseService.injectEndpoints({
         url: `${API_END_POINTS.students}/class-wise-students/${classId}`,
         method: 'GET'
       })
+    }),
+    bulkAssignSection: builder.mutation<{
+      success: boolean;
+      message: string;
+      updated_count: number;
+      students: Student[];
+    }, {
+      class_id: number;
+      student_ids: number[];
+      section_id?: number | null;
+    }>({
+      query: (data) => ({
+        url: `${API_END_POINTS.students}/assign-section`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['students', 'student']
     })
   })
 });
@@ -66,5 +83,6 @@ export const {
   useLazySearchStudentsQuery,
   useStudentSavedMutation,
   useUpdateStudentSettingsMutation,
-  useLazyClassWiseStudentsQuery
+  useLazyClassWiseStudentsQuery,
+  useBulkAssignSectionMutation
 } = studentsService;

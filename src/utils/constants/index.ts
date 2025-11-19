@@ -126,4 +126,9 @@ export const ATTENDANCE_STATUS = {
   }
 };
 
+export const SHIFTS = [
+  { value: 1, label: 'Morning' },
+  { value: 2, label: 'Day' }
+];
+
 export const CURRENCY_SYMBOL = '৳';

@@ -18,6 +18,8 @@ const baseService = createApi({
     'class',
     'school-classes',
     'school-class',
+    'sections',
+    'section',
     'students',
     'student',
     'tuition-fee-heads',
