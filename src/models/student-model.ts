@@ -92,6 +92,7 @@ export interface StudentRequestData {
     student_details_id?: number;
     class_id?: number;
     section_id?: number;
+    shift_id?: number;
     roll?: number;
   },
   studentDetails: {
@@ -126,6 +127,8 @@ export interface StudentFormData {
   student_details_id?: number;
   name?: string;
   class_id?: number;
+  section_id?: number;
+  shift_id?: number;
   roll?: number;
   gender?: 'Male' | 'Female';
   religion_id?: number;

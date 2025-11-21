@@ -33,16 +33,6 @@ export const MAIN_MENU_ITEMS = [
     ],
   },
   {
-    key: 'classes',
-    label: <MenuLink to={'classes'}>Classes</MenuLink>,
-    icon: <UserOutlined />
-  },
-  {
-    key: '/sections',
-    label: <MenuLink to={'/sections'}>Sections</MenuLink>,
-    icon: <AppstoreOutlined />
-  },
-  {
     key: '/manage-students',
     label: 'Manage Students',
     icon: <UserOutlined />,
@@ -70,15 +60,32 @@ export const MAIN_MENU_ITEMS = [
         icon: <UserOutlined />
       },
       {
-        key: '/tuition-fee-heads/settings',
-        label: <MenuLink to={'/tuition-fee-heads/settings'}>Settings</MenuLink>,
+        key: '/tuition-fee-head-settings',
+        label: <MenuLink to={'/tuition-fee-head-settings'}>Settings</MenuLink>,
         icon: <UserOutlined />
       }
     ]
   },
   {
-    key: '/settings',
-    label: <MenuLink to={'/settings'}>System Settings</MenuLink>,
-    icon: <SettingOutlined />
-  },
+    key: '/manage-settings',
+    label: 'Settings',
+    icon: <SettingOutlined />,
+    children: [
+      {
+        key: '/classes',
+        label: <MenuLink to={'/classes'}>Classes</MenuLink>,
+        icon: <UserOutlined />
+      },
+      {
+        key: '/sections',
+        label: <MenuLink to={'/sections'}>Sections</MenuLink>,
+        icon: <AppstoreOutlined />
+      },
+      {
+        key: '/settings',
+        label: <MenuLink to={'/settings'}>System Settings</MenuLink>,
+        icon: <SettingOutlined />
+      }
+    ]
+  }
 ];

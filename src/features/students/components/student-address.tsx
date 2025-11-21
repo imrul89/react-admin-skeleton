@@ -22,12 +22,20 @@ const StudentAddress = ({
   
   const onChangePresentDistrict = (value: number) => {
     onLoadUpazilas(value);
-    form.setFieldValue('present_upazila_id', null);
+    
+    form.setFieldsValue({
+      present_upazila_id: null,
+      present_address: ''
+    });
   };
   
   const onChangePermanentDistrict = (value: number) => {
     onLoadUpazilas2(value);
-    form.setFieldValue('permanent_upazila_id', null);
+    
+    form.setFieldsValue({
+      permanent_upazila_id: null,
+      permanent_address: ''
+    });
   };
   
   useEffect(() => {

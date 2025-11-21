@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Button, Spin } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
+import { Spin } from 'antd';
 import StudentDetails from '@features/students/student-details';
 import { useStudent } from '@hooks/use-students';
 import PageContent from '@layouts/partials/page-content';
@@ -25,14 +24,7 @@ const StudentView = () => {
     <>
       <PageHeader
         title="Student Details"
-      >
-        <Link to={`/students/${studentDetails.id}/edit`}>
-          <Button type="primary" icon={<EditOutlined />}>
-            Edit Student
-          </Button>
-        </Link>
-      </PageHeader>
-      
+      />
       <PageContent>
         <Spin spinning={isLoading}>
           <StudentDetails student={studentDetails} />

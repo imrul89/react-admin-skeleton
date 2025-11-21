@@ -56,7 +56,7 @@ const StudentForm = ({
       initialValues={initialValues}
       onFinish={onFinished}
     >
-      <StudentBasicInfo photoUrl={initialValues?.photo_url} />
+      <StudentBasicInfo photoUrl={initialValues?.photo_url} isEditMode={isEditMode} />
       
       <StudentParents />
       

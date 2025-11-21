@@ -1,5 +1,6 @@
 export const DEFAULT_DISPLAY_DATE_FORMAT = 'DD MMM YYYY';
 export const DEFAULT_DISPLAY_DATE_TIME_FORMAT = 'DD-MM-YYYY HH:mm';
+export const CURRENCY_SYMBOL = '৳';
 
 export const MODAL_SIZES = {
   SMALL: 400,
@@ -62,25 +63,30 @@ export const BLOOD_GROUPS = [
   { label: 'O-', value: 'O-' }
 ];
 
-export const OCCUPATIONS = [
-  { value: 1, label: 'Government Employee' },
-  { value: 2, label: 'Private Employee' },
-  { value: 3, label: 'Teacher' },
-  { value: 4, label: 'Doctor' },
-  { value: 5, label: 'Nurse' },
-  { value: 6, label: 'Pharmacist' },
-  { value: 7, label: 'Engineer' },
-  { value: 8, label: 'Architect' },
-  { value: 9, label: 'Lawyer' },
-  { value: 10, label: 'Banker' },
-  { value: 11, label: 'Business' },
-  { value: 12, label: 'Farmer' },
-  { value: 13, label: 'Actor' },
-  { value: 14, label: 'Housewife' },
-  { value: 15, label: 'Retired' },
-  { value: 16, label: 'Unemployed' },
-  { value: 17, label: 'Other' }
-];
+export const OCCUPATIONS = {
+  1: 'Government Employee',
+  2: 'Private Employee',
+  3: 'Teacher',
+  4: 'Doctor',
+  5: 'Nurse',
+  6: 'Pharmacist',
+  7: 'Engineer',
+  8: 'Architect',
+  9: 'Lawyer',
+  10: 'Banker',
+  11: 'Business',
+  12: 'Farmer',
+  13: 'Actor',
+  14: 'Housewife',
+  15: 'Retired',
+  16: 'Unemployed',
+  17: 'Other'
+};
+
+export const OCCUPATION_OPTIONS = Object.entries(OCCUPATIONS).map(([key, value]) => ({
+  value: Number(key),
+  label: value
+}));
 
 export const PAYMENT_INVOICE_TYPES = {
   SCHOOL: 1,
@@ -126,9 +132,12 @@ export const ATTENDANCE_STATUS = {
   }
 };
 
-export const SHIFTS = [
-  { value: 1, label: 'Morning' },
-  { value: 2, label: 'Day' }
-];
+export const SHIFTS = {
+  1: 'Morning',
+  2: 'Day'
+};
 
-export const CURRENCY_SYMBOL = '৳';
+export const SHIFT_OPTIONS = Object.entries(SHIFTS).map(([key, value]) => ({
+  value: Number(key),
+  label: value
+}));

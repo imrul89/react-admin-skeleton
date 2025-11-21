@@ -106,7 +106,7 @@ export const useTuitionFeeHeadSettingsForm = () => {
   useEffect(() => {
     if (isSuccess) {
       message.success('Tuition fee head settings saved successfully.');
-      navigate('/tuition-fee-heads/settings');
+      navigate('/tuition-fee-head-settings');
     }
     
     if (isError && error) {

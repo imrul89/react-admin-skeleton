@@ -1,6 +1,6 @@
 import { Card, Row, Col, Form, Input, Select, Typography, Divider } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { OCCUPATIONS } from '@utils/constants';
+import { OCCUPATION_OPTIONS } from '@utils/constants';
 import { validationMessage } from '@utils/helpers/message-helpers';
 
 const StudentParents = () => {
@@ -31,8 +31,15 @@ const StudentParents = () => {
           <Form.Item
             label="Mobile Number"
             name="father_mobile_no"
+            rules={[
+              { required: false, message: validationMessage('mobile number') },
+              { pattern: /^(01[3-9]\d{8})?$/, message: 'Invalid mobile number' }
+            ]}
           >
-            <Input placeholder="Mobile Number" />
+            <Input
+              addonBefore="+88"
+              placeholder="01xxxxxxxxx"
+            />
           </Form.Item>
         </Col>
         <Col span={8}>
@@ -41,7 +48,7 @@ const StudentParents = () => {
             name="father_occupation_id"
           >
             <Select
-              options={OCCUPATIONS}
+              options={OCCUPATION_OPTIONS}
               placeholder="Select Occupation"
               optionFilterProp="label"
               showSearch
@@ -69,9 +76,16 @@ const StudentParents = () => {
           <Form.Item
             label="Mobile Number"
             name="mother_mobile_no"
+            rules={[
+              { required: false, message: validationMessage('mobile number') },
+              { pattern: /^(01[3-9]\d{8})?$/, message: 'Invalid mobile number' }
+            ]}
             className="!mb-0"
           >
-            <Input placeholder="Mobile Number" />
+            <Input
+              addonBefore="+88"
+              placeholder="01xxxxxxxxx"
+            />
           </Form.Item>
         </Col>
         <Col span={8}>
@@ -81,7 +95,7 @@ const StudentParents = () => {
             className="!mb-0"
           >
             <Select
-              options={OCCUPATIONS}
+              options={OCCUPATION_OPTIONS}
               placeholder="Select Occupation"
               optionFilterProp="label"
               showSearch

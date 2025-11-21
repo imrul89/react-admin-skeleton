@@ -6,7 +6,7 @@ import { useSectionOptions } from '@hooks/use-sections';
 import { useStudentsQuery, useBulkAssignSectionMutation } from '@services/students-service';
 import { formatQueryParams } from '@utils/helpers';
 import { Student } from '@models/student-model';
-import { SHIFTS } from '@utils/constants';
+import { SHIFT_OPTIONS } from '@utils/constants';
 import type { ColumnsType } from 'antd/es/table';
 
 const { Title, Text } = Typography;
@@ -397,7 +397,7 @@ const SectionAssignment = () => {
               <Select
                 style={{ width: 200, marginLeft: 8 }}
                 placeholder="Select shift"
-                options={SHIFTS}
+                options={SHIFT_OPTIONS}
                 value={selectedShiftId}
                 onChange={handleShiftChange}
               />

@@ -5,6 +5,8 @@ export const transformedToRequestData = (student: StudentFormData): StudentReque
   return {
     student: {
       class_id: student.class_id,
+      section_id: student.section_id,
+      shift_id: student.shift_id,
       roll: student.roll
     },
     studentDetails: {
@@ -67,18 +69,20 @@ export const transformedToFormData = (student: Student): StudentFormData => {
     student_details_id: student.student_details_id,
     name: student.studentDetails?.name,
     class_id: student.class_id,
+    section_id: student.section_id,
+    shift_id: student.shift_id,
     roll: student.roll,
     gender: student.studentDetails?.gender,
     religion_id: student.studentDetails?.religion_id,
     dob: student.studentDetails?.dob ? dayjs(student.studentDetails?.dob, 'YYYY-MM-DD') : null,
     blood_group: student.studentDetails?.blood_group,
-    mobile_no: student.studentDetails?.mobile_no,
+    mobile_no: student.studentDetails?.mobile_no ? student.studentDetails?.mobile_no.slice(-11) : undefined,
     photo_url: student.studentDetails?.photo ? __IMAGE_BASE_URL__ + '/uploads/students/' + student.studentDetails.photo : undefined,
     father_name: father?.name,
-    father_mobile_no: father?.mobile_no,
+    father_mobile_no: father?.mobile_no ? father.mobile_no.slice(-11) : undefined,
     father_occupation_id: father?.occupation_id,
     mother_name: mother?.name,
-    mother_mobile_no: mother?.mobile_no,
+    mother_mobile_no: mother?.mobile_no ? mother.mobile_no.slice(-11) : undefined,
     mother_occupation_id: mother?.occupation_id,
     present_district_id: presentAddress?.upazila?.district_id,
     present_upazila_id: presentAddress?.upazila_id,

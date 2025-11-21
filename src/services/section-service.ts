@@ -44,6 +44,6 @@ export const {
   useSectionsQuery,
   useSectionQuery,
   useSectionSavedMutation,
-  useSectionsByClassQuery
+  useLazySectionsByClassQuery
 } = sectionService;
 

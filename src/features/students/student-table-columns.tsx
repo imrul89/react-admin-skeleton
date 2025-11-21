@@ -3,14 +3,13 @@ import { TableProps, Tag, Typography, Avatar } from 'antd';
 import TypographyWrapper from '@components/shared/typography-wrapper';
 import StudentTableColumnActions from '@features/students/student-table-column-actions';
 import { Student } from '@models/student-model';
+import { SHIFTS } from '@/utils/constants';
 
 const columns: TableProps<Student>['columns'] = [
   {
     title: 'Name',
     dataIndex: ['studentDetails', 'name'],
     key: 'name',
-    width: 120,
-    fixed: 'left',
     render: (_, record) => (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <Link to={`/students/${record.id}`}>
@@ -35,20 +34,28 @@ const columns: TableProps<Student>['columns'] = [
   {
     title: 'Class',
     dataIndex: ['class', 'name'],
-    width: 100,
     key: 'class',
+    width: 180,
     render: (_, record) => (
-      <TypographyWrapper type="text">
-        {record.class?.title}
-      </TypographyWrapper>
+      <div>
+        <TypographyWrapper type="text">
+          {record.class?.title}
+        </TypographyWrapper>
+        {record.section?.title && (
+          <Typography.Text type="secondary" style={{ display: 'flex', fontSize: 12 }}>
+            {record.section.title}
+          </Typography.Text>
+        )}
+      </div>
     )
   },
   {
     title: 'Roll',
     dataIndex: 'roll',
-    width: 50,
+    width: 100,
     key: 'roll',
     align: 'center',
+    sorter: true,
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.roll || '-'}
@@ -56,21 +63,25 @@ const columns: TableProps<Student>['columns'] = [
     )
   },
   {
-    title: 'Gender',
-    dataIndex: ['studentDetails', 'gender'],
-    width: 70,
-    key: 'gender',
-    render: (_, record) => (
-      <TypographyWrapper type="text">
-        {record.studentDetails?.gender || '-'}
-      </TypographyWrapper>
-    )
+    title: 'Shift',
+    dataIndex: 'shift_id',
+    width: 100,
+    key: 'shift',
+    align: 'center',
+    render: (_, record) => {
+      return (
+        <TypographyWrapper type="text">
+          {record?.shift_id ? SHIFTS[record?.shift_id as keyof typeof SHIFTS] || '-' : '-'}
+        </TypographyWrapper>
+      );
+    }
   },
   {
     title: 'Mobile',
     dataIndex: ['studentDetails', 'mobile_no'],
-    width: 100,
+    width: 150,
     key: 'mobile_no',
+    align: 'center',
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.studentDetails?.mobile_no || '-'}
@@ -81,7 +92,7 @@ const columns: TableProps<Student>['columns'] = [
     title: 'Status',
     dataIndex: 'status_id',
     key: 'status',
-    width: 70,
+    width: 100,
     align: 'center',
     render: (_, record) => (
       <TypographyWrapper type="text">
@@ -94,7 +105,7 @@ const columns: TableProps<Student>['columns'] = [
     key: 'action',
     fixed: 'right',
     align: 'center',
-    width: 40,
+    width: 80,
     render: (_, record) => <StudentTableColumnActions student={record as Student} />
   }
 ];

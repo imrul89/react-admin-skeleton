@@ -4,8 +4,10 @@ import { Table, Card, Form, Row, Col, Select } from 'antd';
 import PaginationWrapper from '@components/shared/pagination-wrapper';
 import TableSkeleton from '@components/shared/table-skeleton';
 import { useClassOptions } from '@hooks/use-school-classes';
+import { useSectionOptions } from '@hooks/use-sections';
 import { useStudents } from '@hooks/use-students';
 import useFilter from '@hooks/utility-hooks/use-filter';
+import { SHIFT_OPTIONS } from '@utils/constants';
 import { columns } from './student-table-columns';
 
 const STUDENT_STATUS = [
@@ -15,6 +17,8 @@ const STUDENT_STATUS = [
 
 interface FilterFormValues {
   class_id?: number;
+  section_id?: number;
+  shift_id?: number;
   status_id?: number;
 }
 
@@ -25,6 +29,8 @@ const StudentTable = () => {
   
   const { isLoading, data } = useStudents();
   const { isClassOptionLoading, classOptions } = useClassOptions();
+  const selectedClassId = Form.useWatch('class_id', form);
+  const { isSectionOptionLoading, sectionOptions } = useSectionOptions(selectedClassId);
 
   const queryParams = getQueryParams();
   const [search, setSearch] = useState(getQueryParams().search as string);
@@ -40,6 +46,12 @@ const StudentTable = () => {
       params[fieldName] = fieldValue;
     } else {
       delete params[fieldName];
+    }
+
+    // If class_id is cleared, also remove section_id from URL
+    if (fieldName === 'class_id' && (fieldValue === undefined || fieldValue === null)) {
+      delete params.section_id;
+      form.setFieldsValue({ section_id: undefined });
     }
 
     // Reset to first page when filtering
@@ -59,12 +71,21 @@ const StudentTable = () => {
   useEffect(() => {
     const initialValues: FilterFormValues = {
       class_id: queryParams.class_id ? Number(queryParams.class_id) : undefined,
+      section_id: queryParams.section_id ? Number(queryParams.section_id) : undefined,
+      shift_id: queryParams.shift_id ? Number(queryParams.shift_id) : undefined,
       status_id: queryParams.status_id ? Number(queryParams.status_id) : undefined,
     };
 
     form.setFieldsValue(initialValues);
     searchForm.setFieldsValue({ search: queryParams.search });
   }, []);
+
+  // Reset section when class changes
+  useEffect(() => {
+    if (!selectedClassId) {
+      form.setFieldsValue({ section_id: undefined });
+    }
+  }, [selectedClassId]);
   
   return (
     <>
@@ -75,7 +96,7 @@ const StudentTable = () => {
           onValuesChange={handleValuesChange}
         >
           <Row gutter={24}>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item
                 label="Class"
                 name="class_id"
@@ -90,7 +111,37 @@ const StudentTable = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <Form.Item
+                label="Section"
+                name="section_id"
+                className="!mb-1"
+              >
+                <Select
+                  placeholder="Select section"
+                  allowClear
+                  style={{ width: '100%' }}
+                  loading={isSectionOptionLoading}
+                  options={sectionOptions}
+                  disabled={!selectedClassId}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item
+                label="Shift"
+                name="shift_id"
+                className="!mb-1"
+              >
+                <Select
+                  placeholder="Select shift"
+                  allowClear
+                  style={{ width: '100%' }}
+                  options={SHIFT_OPTIONS}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
               <Form.Item
                 label="Status"
                 name="status_id"
@@ -113,6 +164,7 @@ const StudentTable = () => {
         extra={(
           <div className="my-4">
             <Form form={searchForm} layout="inline">
+              
               <Form.Item name="search" className="!mr-0">
                 <Search
                   placeholder="Search by name, student no, roll or mobile no"

@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { App } from 'antd';
@@ -9,7 +8,7 @@ import {
   useSectionsQuery,
   useSectionSavedMutation,
   useSectionQuery,
-  useSectionsByClassQuery
+  useLazySectionsByClassQuery
 } from '@services/section-service';
 import { formatQueryParams } from '@utils/helpers';
 
@@ -83,21 +82,25 @@ export const useSection = (sectionId: number) => {
   };
 };
 
-export const useSectionOptions = (classId: number | undefined) => {
-  const { isLoading, data: sections } = useSectionsByClassQuery(classId as number, {
-    skip: !classId
-  });
+export const useSectionOptions = () => {
+  const [sectionOptions, setSectionOptions] = useState<Option[]>([]);
+  const [onLoadSections, { isLoading, data, isSuccess }] = useLazySectionsByClassQuery();
 
-  const sectionOptions = useMemo<Option[]>(() => {
-    if (!sections) return [];
-    
-    return sections.map((section) => ({
-      label: section.title,
-      value: section.id
-    }));
-  }, [sections]);
+  const onLoadSectionsByClass = (classId: number) => {
+    onLoadSections(classId);
+  };
+  
+  useEffect(() => {
+    if (isSuccess && data) {
+      setSectionOptions(data.map((section) => ({
+        label: section.title,
+        value: section.id
+      })));
+    }
+  }, [isLoading, data]);
   
   return {
+    onLoadSectionsByClass,
     isSectionOptionLoading: isLoading,
     sectionOptions
   };

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button, Space } from 'antd';
-import { PlusOutlined, SwapOutlined } from '@ant-design/icons';
+import { PlusOutlined, SwapOutlined, EditOutlined } from '@ant-design/icons';
 import StudentTable from '@features/students/student-table';
 import PageContent from '@layouts/partials/page-content';
 import PageHeader from '@layouts/partials/page-header';
@@ -15,6 +15,11 @@ const Students = () => {
           <Link to="/students/promote">
             <Button type="default" icon={<SwapOutlined />}>
               Promote Students
+            </Button>
+          </Link>
+          <Link to="/students/bulk-update">
+            <Button type="default" icon={<EditOutlined />}>
+              Bulk Update
             </Button>
           </Link>
           <Link to="/students/create">

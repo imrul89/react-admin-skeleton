@@ -1,16 +1,34 @@
+import { useEffect } from 'react';
 import { Card, Row, Col, DatePicker, Form, Input, InputNumber, Radio, Select } from 'antd';
 import { ManOutlined, WomanOutlined, UserOutlined } from '@ant-design/icons';
 import ImageCropper from '@features/students/components/image-cropper';
 import { useClassOptions } from '@hooks/use-school-classes';
-import { BLOOD_GROUPS, RELIGIONS } from '@utils/constants';
+import { useSectionOptions } from '@hooks/use-sections';
+import { BLOOD_GROUPS, RELIGIONS, SHIFT_OPTIONS } from '@utils/constants';
 import { validationMessage } from '@utils/helpers/message-helpers';
 
 const StudentBasicInfo = ({
-  photoUrl = ''
+  photoUrl = '',
+  isEditMode = false
 }: {
   photoUrl?: string;
+  isEditMode: boolean;
 }) => {
+  const form = Form.useFormInstance();
+  
   const { isClassOptionLoading, classOptions } = useClassOptions();
+  const { onLoadSectionsByClass, isSectionOptionLoading, sectionOptions } = useSectionOptions();
+  
+  const onClassChange = (value: number) => {
+    form.setFieldsValue({ section_id: null });
+    onLoadSectionsByClass(value);
+  };
+  
+  useEffect(() => {
+    if (isEditMode && form.getFieldValue('class_id')) {
+      onLoadSectionsByClass(form.getFieldValue('class_id'));
+    }
+  }, [isEditMode, form.getFieldValue('class_id')]);
   
   return (
     <Card
@@ -48,8 +66,36 @@ const StudentBasicInfo = ({
                   placeholder="Select Class"
                   options={classOptions}
                   optionFilterProp="label"
-                  showSearch
+                  onChange={onClassChange}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Shift"
+                name="shift_id"
+                rules={[
+                  {required: true, message: validationMessage('shift')}
+                ]}
+              >
+                <Select
+                  placeholder="Select Shift"
+                  options={SHIFT_OPTIONS}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Section"
+                name="section_id"
+              >
+                <Select
+                  loading={isSectionOptionLoading}
+                  placeholder="Select Section"
+                  options={sectionOptions}
+                  optionFilterProp="label"
                   allowClear
+                  disabled={!form.getFieldValue('class_id')}
                 />
               </Form.Item>
             </Col>

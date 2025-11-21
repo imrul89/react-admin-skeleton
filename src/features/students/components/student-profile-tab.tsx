@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import { Row, Col, Typography, Descriptions, Divider } from 'antd';
+import { Row, Col, Typography, Descriptions, Divider, Tag } from 'antd';
 import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 import { Student } from '@models/student-model';
-import { RELIGIONS } from '@utils/constants';
+import { OCCUPATIONS, RELIGIONS, SHIFTS } from '@utils/constants';
 
 const { Title, Text } = Typography;
 
@@ -23,22 +23,33 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
       <Row gutter={[24, 24]} className="!mt-1">
         <Col xs={24} md={12}>
           <Descriptions column={1} size="small">
+            {student?.shift_id && (
+              <Descriptions.Item label="Shift">
+                {SHIFTS[student?.shift_id as keyof typeof SHIFTS]}
+              </Descriptions.Item>
+            )}
             <Descriptions.Item label="Class">
               {student.class?.title}
+            </Descriptions.Item>
+            <Descriptions.Item label="Section">
+              {student.section?.title}
             </Descriptions.Item>
             <Descriptions.Item label="Roll">
               {student.roll || 'N/A'}
             </Descriptions.Item>
+            <Descriptions.Item label="Status">
+              {student.status_id === 1 ? <Tag color="green">Active</Tag> : <Tag color="red">Inactive</Tag>}
+            </Descriptions.Item>
+          </Descriptions>
+        </Col>
+        <Col xs={24} md={12}>
+          <Descriptions column={1} size="small">
             <Descriptions.Item label="Gender">
               {studentDetails?.gender}
             </Descriptions.Item>
             <Descriptions.Item label="Date of Birth">
               {studentDetails?.dob ? dayjs(studentDetails.dob).format('DD MMM YYYY') : 'N/A'}
             </Descriptions.Item>
-          </Descriptions>
-        </Col>
-        <Col xs={24} md={12}>
-          <Descriptions column={1} size="small">
             <Descriptions.Item label="Blood Group">
               {studentDetails?.blood_group || 'N/A'}
             </Descriptions.Item>
@@ -66,11 +77,8 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
               <Descriptions.Item label="Mobile">
                 {father.parent.mobile_no || 'N/A'}
               </Descriptions.Item>
-              <Descriptions.Item label="Email">
-                {father.parent.email || 'N/A'}
-              </Descriptions.Item>
               <Descriptions.Item label="Occupation">
-                {father.parent.occupation_id || 'N/A'}
+                {father.parent.occupation_id ? OCCUPATIONS[father.parent.occupation_id as keyof typeof OCCUPATIONS] : 'N/A'}
               </Descriptions.Item>
             </Descriptions>
           ) : (
@@ -90,11 +98,8 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
               <Descriptions.Item label="Mobile">
                 {mother.parent.mobile_no || 'N/A'}
               </Descriptions.Item>
-              <Descriptions.Item label="Email">
-                {mother.parent.email || 'N/A'}
-              </Descriptions.Item>
               <Descriptions.Item label="Occupation">
-                {mother.parent.occupation_id || 'N/A'}
+                {mother.parent.occupation_id ? OCCUPATIONS[mother.parent.occupation_id as keyof typeof OCCUPATIONS] : 'N/A'}
               </Descriptions.Item>
             </Descriptions>
           ) : (

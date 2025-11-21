@@ -1,6 +1,14 @@
 import { useState } from 'react';
-import { Card, Avatar, Tabs, Flex, Typography } from 'antd';
-import { OrderedListOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { Card, Avatar, Tabs, Flex, Typography, Button } from 'antd';
+import {
+  CheckCircleFilled,
+  CloseCircleFilled,
+  EditOutlined,
+  OrderedListOutlined,
+  SettingOutlined,
+  UserOutlined
+} from '@ant-design/icons';
 import StudentAttendanceTab from '@features/students/components/student-attendance-tab';
 import StudentProfileTab from '@features/students/components/student-profile-tab';
 import StudentSettingsTab from '@features/students/components/student-settings-tab';
@@ -56,8 +64,15 @@ const StudentDetails = ({
                 {student.studentDetails?.name?.charAt(0)?.toUpperCase()}
               </Avatar>
             </Flex>
-            <Flex vertical justify="center">
-              <Typography.Title level={3} className="!mb-2">{student.studentDetails?.name}</Typography.Title>
+            <Flex vertical justify="center" className="min-w-[500px]">
+              <Typography.Title level={3} className="!mb-2">
+                {student.studentDetails?.name}
+                {student.status_id === 1 ? (
+                  <CheckCircleFilled style={{ color: '#389e0d', fontSize: 18, marginLeft: 10 }} />
+                ) : (
+                  <CloseCircleFilled style={{ color: '#ec2f2f', fontSize: 18, marginLeft: 10 }} />
+                )}
+              </Typography.Title>
               <Typography.Text type="secondary">
                 <span className="pr-2">Student Number : </span>
                 <span className="text-gray-700 font-bold">{student.studentDetails?.student_no}</span>
@@ -70,6 +85,11 @@ const StudentDetails = ({
                 <span className="pr-4">Roll : </span>
                 <span className="text-gray-700 font-bold">{student.roll}</span>
               </Typography.Text>
+            </Flex>
+            <Flex justify="right" className="w-full">
+              <Link to={`/students/${student.id}/edit`}>
+                <Button color="primary" shape="circle" variant="filled" icon={<EditOutlined />} />
+              </Link>
             </Flex>
           </Flex>
         </div>

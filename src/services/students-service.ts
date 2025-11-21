@@ -1,4 +1,5 @@
 import { Student, Students, StudentSettingsUpdateRequest } from '@models/student-model';
+import { BulkUpdateStudentsRequest, BulkUpdateStudentsResponse } from '@models/student-bulk-update-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
 
@@ -73,6 +74,14 @@ export const studentsService = baseService.injectEndpoints({
         body: data
       }),
       invalidatesTags: ['students', 'student']
+    }),
+    bulkUpdateStudents: builder.mutation<BulkUpdateStudentsResponse, BulkUpdateStudentsRequest>({
+      query: (data) => ({
+        url: `${API_END_POINTS.students}/bulk-update`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['students', 'student']
     })
   })
 });
@@ -84,5 +93,6 @@ export const {
   useStudentSavedMutation,
   useUpdateStudentSettingsMutation,
   useLazyClassWiseStudentsQuery,
-  useBulkAssignSectionMutation
+  useBulkAssignSectionMutation,
+  useBulkUpdateStudentsMutation
 } = studentsService;

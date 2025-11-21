@@ -1,3 +1,5 @@
+import Attendance from '@pages/attendance';
+import CreateAttendance from '@pages/attendance/create';
 import Dashboard from '@pages/dashboard';
 import Permissions from '@pages/permissions';
 import PermissionCreate from '@pages/permissions/create';
@@ -15,17 +17,16 @@ import SectionEdit from '@pages/sections/edit';
 import Profile from '@pages/settings';
 import Settings from '@pages/settings/settings';
 import Students from '@pages/students';
+import AssignSections from '@pages/students/assign-sections';
+import StudentBulkUpdate from '@pages/students/bulk-update';
 import StudentCreate from '@pages/students/create';
 import StudentEdit from '@pages/students/edit';
-import StudentView from '@pages/students/view';
 import PromoteStudents from '@pages/students/promote';
-import AssignSections from '@pages/students/assign-sections';
+import StudentView from '@pages/students/view';
 import TuitionFeeHeads from '@pages/tuition-fee-heads';
 import TuitionFeeHeadCreate from '@pages/tuition-fee-heads/create';
 import TuitionFeeHeadEdit from '@pages/tuition-fee-heads/edit';
 import TuitionFeeHeadSettings from '@pages/tuition-fee-heads/settings';
-import Attendance from '@pages/attendance';
-import CreateAttendance from '@pages/attendance/create';
 import Users from '@pages/users';
 import UserCreate from '@pages/users/create';
 import UserEdit from '@pages/users/edit';
@@ -225,6 +226,12 @@ const routes = [
         exact: true
       },
       {
+        path: 'bulk-update',
+        breadcrumb: 'Bulk Update',
+        component: StudentBulkUpdate,
+        exact: true
+      },
+      {
         path: ':id',
         breadcrumb: 'Student Details',
         component: StudentView,
@@ -257,18 +264,19 @@ const routes = [
         exact: true
       },
       {
-        path: 'settings',
-        breadcrumb: 'Tuition Fee Head Settings',
-        component: TuitionFeeHeadSettings,
-        exact: true
-      },
-      {
         path: ':id',
         breadcrumb: 'Edit Tuition Fee Head',
         component: TuitionFeeHeadEdit,
         exact: true
       }
     ]
+  },
+  {
+    path: 'tuition-fee-head-settings',
+    breadcrumb: 'Tuition Fee Head Settings',
+    component: TuitionFeeHeadSettings,
+    exact: true,
+    children: []
   },
   {
     path: 'attendance',
