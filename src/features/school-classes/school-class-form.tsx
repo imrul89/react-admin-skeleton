@@ -1,40 +1,77 @@
+import _ from 'lodash';
 import { useEffect } from 'react';
-import { Card, Form, Row, Col, Button, Input, Select } from 'antd';
+import { Card, Form, Row, Col, Button, Select } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { useSchoolClassForm } from '@hooks/use-school-classes.ts';
-import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
 import { SchoolClass, SchoolClassPartial } from '@models/school-class-model';
-import { validationMessage } from '@utils/helpers/message-helpers';
+import { MONTHS } from '@utils/constants';
 
 interface SchoolClassFormProps {
   initialValues?: SchoolClassPartial;
   isEditMode?: boolean;
+  onSaved?: (schoolClass: SchoolClass) => void;
+  isLoading?: boolean;
+  showCard?: boolean;
 }
 
 const SchoolClassForm = ({
   initialValues,
-  isEditMode = false
+  isEditMode = false,
+  onSaved: externalOnSaved,
+  isLoading: externalIsLoading,
+  showCard = true
 }: SchoolClassFormProps) => {
   const [form] = Form.useForm();
 
-  const formTitle = `${isEditMode ? 'Edit ' : 'Create'} class`;
-  const formValues = Form.useWatch([], form);
-  const isFormValid = useFormValidation(form, formValues);
+  const formTitle = isEditMode ? 'Coaching Configuration' : 'Create class';
+  // Form is always valid since coaching_applicable is optional
+  const isFormValid = true;
 
-  const { onSaved, isLoading } = useSchoolClassForm();
+  const { onSaved: defaultOnSaved, isLoading: defaultIsLoading } = useSchoolClassForm();
+  const onSaved = externalOnSaved || defaultOnSaved;
+  const isLoading = externalIsLoading !== undefined ? externalIsLoading : defaultIsLoading;
 
   useEffect(() => {
     if (initialValues) {
       form.setFieldsValue({
-      ...initialValues
+        ...initialValues,
+        coaching_applicable: initialValues.coaching_applicable ? initialValues.coaching_applicable.split(',').map(Number) : [],
       });
     }
   }, [initialValues]);
 
-  const onFinished = (values: SchoolClass) => {
-    values.id = isEditMode ? initialValues?.id ?? 0 : 0;
-    onSaved(values);
+  const onFinished = (values: any) => {
+    // Only send coaching_applicable field for edit mode
+    const updateData: SchoolClass = {
+      ...initialValues!,
+      id: initialValues?.id ?? 0,
+      coaching_applicable: values.coaching_applicable 
+        ? _.sortBy(values.coaching_applicable).toString() 
+        : ''
+    };
+    
+    onSaved(updateData);
   };
+
+  const formContent = (
+    <Row gutter={24}>
+      <Col span={24}>
+        <Form.Item
+          label="Coaching Applicable on Months"
+          name="coaching_applicable"
+          className="!mb-0"
+        >
+          <Select
+            placeholder="Select months"
+            options={MONTHS}
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+          />
+        </Form.Item>
+      </Col>
+    </Row>
+  );
 
   return (
     <Form
@@ -44,52 +81,13 @@ const SchoolClassForm = ({
       initialValues={initialValues}
       onFinish={onFinished}
     >
-      <Card title={formTitle}>
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item
-              label="Title"
-              name="title"
-              rules={[
-                { required: true, message: validationMessage('Title') }
-              ]}
-            >
-              <Input placeholder="Title" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Code"
-              name="code"
-              rules={[
-                { required: true, message: validationMessage('Code') }
-              ]}
-            >
-              <Input placeholder="Code" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Serial"
-              name="serial"
-            >
-              <Select
-                options={[]}
-                placeholder="Select Serial"
-                allowClear
-              />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Coaching Applicable"
-              name="coaching_applicable"
-            >
-              <Input placeholder="Coaching Applicable" />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Card>
+      {showCard ? (
+        <Card title={formTitle}>
+          {formContent}
+        </Card>
+      ) : (
+        formContent
+      )}
       <Row className="my-6">
         <Col span={24} className="text-right">
           <Button

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { App, Modal } from 'antd';
+import SettingsContext from '@contexts/settings-context.tsx';
 import { printInvoice } from '@features/students/components/payments/print-invoice.tsx';
 import { TuitionFeePayment, TuitionFeePaymentRequest } from '@models/tuition-fee-payment-model';
 import { AppError } from '@models/utils-model';
@@ -10,6 +11,7 @@ import {
   useDeletePaymentInvoiceMutation
 } from '@services/tuition-fee-payments-service';
 import { MONTHS } from '@utils/constants';
+import { useAppSelector } from '@/store';
 
 export const useTuitionFeePayments = () => {
   const [tuitionFeePayments, setTuitionFeePayments] = useState<TuitionFeePayment[]>([]);
@@ -110,8 +112,10 @@ export const useTuitionFeePaymentInvoices = () => {
 };
 
 export const useTuitionFeePaymentInvoice = () => {
-  const [isDirectPrint, setIsDirectPrint] = useState(false);
+  const user = useAppSelector((state) => state.user);
+  const { settings } = useContext(SettingsContext);
   
+  const [isDirectPrint, setIsDirectPrint] = useState(false);
   const [onLoad, { isLoading, data }] = useLazyPaymentInvoiceQuery();
   
   const onLoadInvoice = (invoiceId: number, isDirectPrint = false) => {
@@ -121,7 +125,7 @@ export const useTuitionFeePaymentInvoice = () => {
   
   useEffect(() => {
     if (isDirectPrint && data) {
-      printInvoice(data);
+      printInvoice(data, settings, user.year);
     }
   }, [isLoading, data]);
   

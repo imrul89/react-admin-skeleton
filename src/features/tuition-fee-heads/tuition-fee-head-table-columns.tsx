@@ -3,6 +3,7 @@ import { MenuProps, Dropdown, Button, TableProps } from 'antd';
 import { MoreOutlined, EditOutlined } from '@ant-design/icons';
 import TypographyWrapper from '@components/shared/typography-wrapper';
 import { TuitionFeeHead } from '@models/tuition-fee-head-model.ts';
+import { getTuitionFeeHeadType } from '@utils/helpers';
 
 const getActions = (record: TuitionFeeHead): MenuProps['items'] => {
   return [
@@ -37,9 +38,20 @@ const columns: TableProps<TuitionFeeHead>['columns'] = [
     )
   },
   {
+    title: 'Account Type',
+    dataIndex: 'account_type',
+    key: 'account_type',
+    render: (_, record) => (
+      <TypographyWrapper type="text">
+        {getTuitionFeeHeadType(record.account_type_id)}
+      </TypographyWrapper>
+    )
+  },
+  {
     title: 'Serial',
     dataIndex: 'serial',
     key: 'serial',
+    sorter: true,
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.serial}

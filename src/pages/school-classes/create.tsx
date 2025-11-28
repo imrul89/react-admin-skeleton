@@ -10,7 +10,6 @@ const SchoolClassCreate = () => {
     <>
       <PageHeader
         title="Create Class"
-        subTitle="Fill in the details to create a new class"
       />
       <PageContent>
         <SchoolClassForm initialValues={initialValues} />

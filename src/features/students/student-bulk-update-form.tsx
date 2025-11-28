@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   App,
   Card,
@@ -10,6 +10,7 @@ import {
   Table,
   InputNumber,
   Radio,
+  Checkbox,
   Space,
   Typography,
   Empty,
@@ -17,12 +18,10 @@ import {
 } from 'antd';
 import { SaveOutlined, EditOutlined } from '@ant-design/icons';
 import { useClassOptions } from '@hooks/use-school-classes';
-import { useStudentsQuery, useBulkUpdateStudentsMutation } from '@services/students-service';
+import { useStudentsForBulkUpdateQuery, useBulkUpdateStudentsMutation } from '@services/students-service';
 import { Student } from '@models/student-model';
 import { BulkUpdateStudentItem, BulkUpdateStudentsRequest } from '@models/student-bulk-update-model';
-import { SHIFT_OPTIONS, RELIGIONS, MONTHS } from '@utils/constants';
-import { formatQueryParams } from '@utils/helpers';
-import useFilter from '@hooks/utility-hooks/use-filter';
+import { SHIFT_OPTIONS, RELIGIONS, MONTHS_SHORT } from '@utils/constants';
 
 const { Text, Title } = Typography;
 
@@ -30,7 +29,6 @@ const StudentBulkUpdateForm = () => {
   const [form] = Form.useForm();
   const { message } = App.useApp();
   const { isClassOptionLoading, classOptions } = useClassOptions();
-  const { getDefaultQueryParams } = useFilter();
   
   const [selectedClassId, setSelectedClassId] = useState<number | undefined>();
   const [selectedShiftId, setSelectedShiftId] = useState<number | undefined>();
@@ -39,36 +37,18 @@ const StudentBulkUpdateForm = () => {
 
   const [bulkUpdate, { isLoading: isUpdating }] = useBulkUpdateStudentsMutation();
 
-  // Build query params for fetching students
-  const queryParams = useMemo(() => {
-    if (!selectedClassId || !selectedShiftId) return '';
-    return formatQueryParams({
-      class_id: selectedClassId,
-      shift_id: selectedShiftId,
-      limit: 1000,
-      offset: 0
-    });
-  }, [selectedClassId, selectedShiftId]);
-
-  const { data: studentsResponse, isLoading: isLoadingStudents, refetch } = useStudentsQuery(queryParams, {
-    skip: !selectedClassId || !selectedShiftId || queryParams === ''
-  });
+  // Use optimized endpoint for bulk update
+  const { data: studentsResponse, isLoading: isLoadingStudents, refetch } = useStudentsForBulkUpdateQuery(
+    { classId: selectedClassId!, shiftId: selectedShiftId! },
+    { skip: !selectedClassId || !selectedShiftId }
+  );
 
   useEffect(() => {
     if (studentsResponse?.students) {
       setStudentsData(studentsResponse.students);
-      // Initialize edited students map
-      const initialMap = new Map<number, Partial<BulkUpdateStudentItem>>();
-      studentsResponse.students.forEach(student => {
-        initialMap.set(student.id, {
-          student_id: student.id,
-          roll: student.roll || undefined,
-          gender: student.studentDetails?.gender,
-          religion_id: student.studentDetails?.religion_id,
-          shift_id: student.shift_id || undefined,
-          coaching_off_months: student.coaching_off ? student.coaching_off.split(',').map(Number) : []
-        });
-      });
+      // Initialize edited students map - only store initial values, not all fields
+      const initialMap = new Map<number, Partial<BulkUpdateStudentItem & { coaching_off_months?: number[] }>>();
+      // Only initialize map, don't pre-populate with all values to reduce memory
       setEditedStudents(initialMap);
     }
   }, [studentsResponse]);
@@ -86,14 +66,16 @@ const StudentBulkUpdateForm = () => {
     setEditedStudents(new Map());
   };
 
-  const handleFieldChange = (studentId: number, field: keyof BulkUpdateStudentItem | 'coaching_off_months', value: any) => {
-    const updated = new Map(editedStudents);
-    const current = updated.get(studentId) || { student_id: studentId };
-    updated.set(studentId, { ...current, [field]: value });
-    setEditedStudents(updated);
-  };
+  const handleFieldChange = useCallback((studentId: number, field: keyof BulkUpdateStudentItem | 'coaching_off_months', value: any) => {
+    setEditedStudents(prev => {
+      const updated = new Map(prev);
+      const current = updated.get(studentId) || { student_id: studentId };
+      updated.set(studentId, { ...current, [field]: value });
+      return updated;
+    });
+  }, []);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!selectedClassId || !selectedShiftId) {
       message.error('Please select both class and shift');
       return;
@@ -105,19 +87,24 @@ const StudentBulkUpdateForm = () => {
     }
 
     try {
+      // Create a map for faster lookups
+      const studentsMap = new Map(studentsData.map(s => [s.id, s]));
+      
       const studentsToUpdate: BulkUpdateStudentItem[] = Array.from(editedStudents.values())
         .filter(student => {
           // Only include students that have actual changes
-          const original = studentsData.find(s => s.id === student.student_id);
+          const original = studentsMap.get(student.student_id!);
           if (!original) return false;
+          
+          const originalMonths = original.coaching_off ? original.coaching_off.split(',').map(Number).sort() : [];
+          const editedMonths = ((student as any).coaching_off_months || []).sort();
+          
           return (
             student.roll !== original.roll ||
             student.gender !== original.studentDetails?.gender ||
             student.religion_id !== original.studentDetails?.religion_id ||
             student.shift_id !== original.shift_id ||
-            JSON.stringify(student.coaching_off || []) !== JSON.stringify(
-              original.coaching_off ? original.coaching_off.split(',').map(Number) : []
-            )
+            JSON.stringify(editedMonths) !== JSON.stringify(originalMonths)
           );
         })
         .map(student => ({
@@ -144,14 +131,15 @@ const StudentBulkUpdateForm = () => {
     } catch (error: any) {
       message.error(error?.data?.message || 'Failed to update students');
     }
-  };
+  }, [selectedClassId, selectedShiftId, editedStudents, studentsData, bulkUpdate, message, refetch]);
 
-  const columns = [
+  // Memoize columns to prevent recreation on every render
+  const columns = useMemo(() => [
     {
       title: 'Name',
       dataIndex: ['studentDetails', 'name'],
       key: 'name',
-      width: 150,
+      width: 200,
       fixed: 'left' as const,
       render: (_: any, record: Student) => (
         <div>
@@ -167,7 +155,8 @@ const StudentBulkUpdateForm = () => {
       title: 'Roll',
       dataIndex: 'roll',
       key: 'roll',
-      width: 100,
+      width: 80,
+      align: 'center' as const,
       render: (_: any, record: Student) => {
         const edited = editedStudents.get(record.id);
         return (
@@ -185,7 +174,8 @@ const StudentBulkUpdateForm = () => {
       title: 'Gender',
       dataIndex: ['studentDetails', 'gender'],
       key: 'gender',
-      width: 120,
+      width: 140,
+      align: 'center' as const,
       render: (_: any, record: Student) => {
         const edited = editedStudents.get(record.id);
         const currentGender = edited?.gender !== undefined 
@@ -196,6 +186,7 @@ const StudentBulkUpdateForm = () => {
             value={currentGender}
             onChange={(e) => handleFieldChange(record.id, 'gender', e.target.value)}
             size="small"
+            buttonStyle='solid'
           >
             <Radio.Button value="Male">Male</Radio.Button>
             <Radio.Button value="Female">Female</Radio.Button>
@@ -207,7 +198,7 @@ const StudentBulkUpdateForm = () => {
       title: 'Religion',
       dataIndex: ['studentDetails', 'religion_id'],
       key: 'religion',
-      width: 150,
+      width: 140,
       render: (_: any, record: Student) => {
         const edited = editedStudents.get(record.id);
         const currentReligion = edited?.religion_id !== undefined 
@@ -218,7 +209,7 @@ const StudentBulkUpdateForm = () => {
             value={currentReligion}
             onChange={(value) => handleFieldChange(record.id, 'religion_id', value)}
             options={RELIGIONS}
-            placeholder="Select Religion"
+            placeholder="Select"
             style={{ width: '100%' }}
             allowClear
           />
@@ -229,7 +220,7 @@ const StudentBulkUpdateForm = () => {
       title: 'Shift',
       dataIndex: 'shift_id',
       key: 'shift',
-      width: 120,
+      width: 80,
       render: (_: any, record: Student) => {
         const edited = editedStudents.get(record.id);
         const currentShift = edited?.shift_id !== undefined 
@@ -247,44 +238,83 @@ const StudentBulkUpdateForm = () => {
       }
     },
     {
-      title: 'Coaching Off Months',
+      title: 'Coaching Off on Months',
       dataIndex: 'coaching_off',
       key: 'coaching_off',
-      width: 200,
+      width: 300,
       render: (_: any, record: Student) => {
         const edited = editedStudents.get(record.id);
         const currentMonths = edited?.coaching_off_months !== undefined 
           ? edited.coaching_off_months 
           : (record.coaching_off ? record.coaching_off.split(',').map(Number) : []);
+        
+        const allMonthValues = MONTHS_SHORT.map(m => m.value);
+        const allSelected = allMonthValues.every(month => currentMonths.includes(month));
+        const someSelected = currentMonths.length > 0 && currentMonths.length < 12;
+        
+        const handleAllChange = (e: any) => {
+          if (e.target.checked) {
+            handleFieldChange(record.id, 'coaching_off_months', allMonthValues);
+          } else {
+            handleFieldChange(record.id, 'coaching_off_months', []);
+          }
+        };
+        
         return (
-          <Select
-            mode="multiple"
-            value={currentMonths}
-            onChange={(value) => handleFieldChange(record.id, 'coaching_off_months', value)}
-            options={MONTHS}
-            placeholder="Select Months"
-            style={{ width: '100%' }}
-            allowClear
-            maxTagCount={3}
-          />
+          <div>
+            <Checkbox
+              indeterminate={someSelected}
+              checked={allSelected}
+              onChange={handleAllChange}
+              style={{ marginBottom: '8px', fontWeight: 600 }}
+            >
+              All
+            </Checkbox>
+            <Checkbox.Group
+              value={currentMonths}
+              onChange={(value) => handleFieldChange(record.id, 'coaching_off_months', value)}
+              style={{ 
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(6, 1fr)',
+                gap: '4px'
+              }}
+            >
+              {MONTHS_SHORT.map(month => (
+                <Checkbox key={month.value} value={month.value}>
+                  {month.label}
+                </Checkbox>
+              ))}
+            </Checkbox.Group>
+          </div>
         );
       }
     }
-  ];
+  ], [editedStudents, handleFieldChange]);
 
-  const hasChanges = editedStudents.size > 0 && Array.from(editedStudents.values()).some(student => {
-    const original = studentsData.find(s => s.id === student.student_id);
-    if (!original) return false;
-    return (
-      student.roll !== original.roll ||
-      student.gender !== original.studentDetails?.gender ||
-      student.religion_id !== original.studentDetails?.religion_id ||
-      student.shift_id !== original.shift_id ||
-      JSON.stringify((student as any).coaching_off_months || []) !== JSON.stringify(
-        original.coaching_off ? original.coaching_off.split(',').map(Number) : []
-      )
-    );
-  });
+  // Memoize hasChanges calculation to avoid expensive computation on every render
+  const hasChanges = useMemo(() => {
+    if (editedStudents.size === 0) return false;
+    
+    // Create a map for faster lookups
+    const studentsMap = new Map(studentsData.map(s => [s.id, s]));
+    
+    return Array.from(editedStudents.values()).some(student => {
+      const original = studentsMap.get(student.student_id!);
+      if (!original) return false;
+      
+      const originalMonths = original.coaching_off ? original.coaching_off.split(',').map(Number).sort() : [];
+      const editedMonths = ((student as any).coaching_off_months || []).sort();
+      
+      return (
+        student.roll !== original.roll ||
+        student.gender !== original.studentDetails?.gender ||
+        student.religion_id !== original.studentDetails?.religion_id ||
+        student.shift_id !== original.shift_id ||
+        JSON.stringify(editedMonths) !== JSON.stringify(originalMonths)
+      );
+    });
+  }, [editedStudents, studentsData]);
 
   return (
     <Card title={<Title level={5}><EditOutlined /> Bulk Student Update</Title>}>
@@ -334,8 +364,8 @@ const StudentBulkUpdateForm = () => {
                     dataSource={studentsData}
                     rowKey="id"
                     pagination={false}
-                    scroll={{ x: 1000 }}
-                    style={{ marginTop: 24 }}
+                    style={{ marginTop: 12 }}
+                    size="small"
                   />
                   <Row className="mt-4">
                     <Col span={24} className="text-right">

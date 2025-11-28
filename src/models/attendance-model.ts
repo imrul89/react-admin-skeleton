@@ -20,6 +20,7 @@ export interface AttendanceQueryParams {
   student_id?: number;
   class_id?: number;
   section_id?: number;
+  shift_id?: number;
   roll?: number;
   status?: number;
   attendance_for?: number;
@@ -35,6 +36,7 @@ export interface AttendanceQueryParams {
 export interface ClassWiseAttendanceRequest {
   class_id: number;
   section_id?: number;
+  shift_id?: number;
   attendance_for: number;
   date: string;
   absent_student_ids: number[];
@@ -65,6 +67,7 @@ export interface UpdateAttendanceRequest {
 export interface CheckAttendanceExistsRequest {
   class_id: number;
   section_id?: number;
+  shift_id?: number;
   attendance_for: number;
   date: string;
 }
@@ -74,5 +77,28 @@ export interface CheckAttendanceExistsResponse {
   total_students: number;
   marked_count: number;
   attendance_ids?: number[];
+}
+
+export interface StudentAttendanceSummaryResponse {
+  student_id: number;
+  student: {
+    id: number;
+    roll: number | null;
+    name: string;
+    class_id: number;
+  } | null;
+  summary: {
+    total_days: number;
+    present_days: number;
+    absent_days: number;
+    attendance_percentage: string;
+  };
+  attendances: Attendance[];
+}
+
+export interface StudentAttendanceSummaryParams {
+  attendance_for?: number;
+  start_date?: string;
+  end_date?: string;
 }
 

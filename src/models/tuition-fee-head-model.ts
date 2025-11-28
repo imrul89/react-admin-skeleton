@@ -1,6 +1,6 @@
 export interface TuitionFeeHead {
   id: number;
-  head_type_id: number;
+  account_type_id: number;
   title: string;
   type: string;
   serial: number;

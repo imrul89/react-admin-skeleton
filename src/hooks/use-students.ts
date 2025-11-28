@@ -26,6 +26,7 @@ export const useStudents = () => {
   const queryParams = getQueryParams();
 
   const [filterParams, setFilterParams] = useState<QueryParams>({});
+  const [defaultFilterParams, setDefaultFilterParams] = useState<QueryParams>({});
   const [skip, setSkip] = useState<boolean>(true);
 
   const { isFetching, data: response } = useStudentsQuery(formatQueryParams(filterParams), { skip: skip });
@@ -36,18 +37,20 @@ export const useStudents = () => {
 
   useEffect(() => {
     const newQueryParams = {
-      ...filterParams,
+      ...queryParams,
       ...getDefaultQueryParams(),
     };
 
-    setQueryParams(newQueryParams);
     setFilterParams(newQueryParams);
+    setDefaultFilterParams(newQueryParams);
+    setQueryParams(newQueryParams);
     setSkip(false);
   }, []);
 
   const loading = isFetching;
 
   return {
+    defaultFilterParams,
     isLoading: loading,
     data: response
   };

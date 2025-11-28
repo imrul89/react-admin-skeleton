@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Card, Form, Row, Col, Button, Input, Select } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
-import { useSectionForm } from '@hooks/use-sections';
 import { useClassOptions } from '@hooks/use-school-classes';
+import { useSectionForm } from '@hooks/use-sections';
 import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
 import { Section, SectionPartial } from '@models/section-model';
 import { validationMessage } from '@utils/helpers/message-helpers';
@@ -66,6 +66,9 @@ const SectionForm = ({
             <Form.Item
               label="Class"
               name="class_id"
+              rules={[
+                { required: true, message: validationMessage('Class') }
+              ]}
             >
               <Select
                 options={classOptions}
@@ -76,23 +79,6 @@ const SectionForm = ({
                 filterOption={(input, option) =>
                   (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                 }
-              />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              label="Status"
-              name="status"
-              rules={[
-                { required: true, message: validationMessage('Status') }
-              ]}
-            >
-              <Select
-                options={[
-                  { label: 'Active', value: 1 },
-                  { label: 'Inactive', value: 0 }
-                ]}
-                placeholder="Select Status"
               />
             </Form.Item>
           </Col>

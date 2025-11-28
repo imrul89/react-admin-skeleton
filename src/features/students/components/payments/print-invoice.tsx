@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'antd';
 import { PrinterOutlined } from '@ant-design/icons';
+import SettingsContext from '@contexts/settings-context';
+import { Setting } from '@models/setting-model';
 import { Student } from '@models/student-model';
 import { TuitionFeePaymentInvoice } from '@models/tuition-fee-payment-model';
-import { dateFormat, formatNumber, getMonthName } from '@utils/helpers';
+import { dateFormat, formatNumber, getMonthName, getShiftName } from '@utils/helpers';
+import { useAppSelector } from '@/store';
 
-export function printInvoice(invoice: (TuitionFeePaymentInvoice & { student?: Student }) | null, opts?: { widthMm?: number }) {
+export function printInvoice(
+  invoice: (TuitionFeePaymentInvoice & { student?: Student }) | null,
+  settings: Setting,
+  year: number,
+  opts?: { widthMm?: number }
+) {
   if (!invoice) return;
-
+  
   const widthMm = opts?.widthMm || 72;
   const student = (invoice as any).student;
   const title = `Invoice #${invoice.id}`;
@@ -46,9 +54,11 @@ export function printInvoice(invoice: (TuitionFeePaymentInvoice & { student?: St
   }).join('');
 
   const studentInfoHtml = `
-    <div class="center bold" style="font-size: 16px;">School / Institute</div>
+    <div class="center bold" style="font-size: 16px; margin-bottom: 5px;">${settings.name}</div>
+    <div class="center" style="font-size: 12px;">${settings.address}</div>
     <div class="sep"></div>
-    <div class="center" style="font-size: 16px;">Money Receipt</div>
+    <div class="center" style="font-size: 16px; margin-bottom: 5px;">Money Receipt</div>
+    <div class="center" style="font-size: 12px;">Accounting Year - ${year}</div>
     <div class="sep"></div>
     <table>
       <tr>
@@ -59,6 +69,10 @@ export function printInvoice(invoice: (TuitionFeePaymentInvoice & { student?: St
       </tr>
       <tr>
         <td>Class: ${student?.class?.title || '-' }</td>
+        <td class="right">Shift: ${getShiftName(student?.shift_id)}</td>
+      </tr>
+      <tr>
+        <td>Section: ${student?.section?.title || '-' }</td>
         <td class="right">Roll: ${student?.roll || '-'}</td>
       </tr>
       <tr>
@@ -224,11 +238,14 @@ export default function PrintInvoiceButton({
   children?: React.ReactNode;
   buttonProps?: any;
 }) {
+  const user = useAppSelector((state) => state.user);
+  const { settings } = useContext(SettingsContext);
+  
   return (
     <Button
       type="primary"
       icon={<PrinterOutlined />}
-      onClick={() => printInvoice(invoice, { widthMm })}
+      onClick={() => printInvoice(invoice, settings, user.year, { widthMm })}
       disabled={!invoice}
       {...buttonProps}
     >

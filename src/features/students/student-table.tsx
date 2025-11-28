@@ -1,5 +1,5 @@
 import Search from 'antd/es/input/Search';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Table, Card, Form, Row, Col, Select } from 'antd';
 import PaginationWrapper from '@components/shared/pagination-wrapper';
 import TableSkeleton from '@components/shared/table-skeleton';
@@ -27,13 +27,9 @@ const StudentTable = () => {
   const [searchForm] = Form.useForm();
   const { getQueryParams, setQueryParams, sortTableColumn } = useFilter();
   
-  const { isLoading, data } = useStudents();
+  const { defaultFilterParams, isLoading, data } = useStudents();
   const { isClassOptionLoading, classOptions } = useClassOptions();
-  const selectedClassId = Form.useWatch('class_id', form);
-  const { isSectionOptionLoading, sectionOptions } = useSectionOptions(selectedClassId);
-
-  const queryParams = getQueryParams();
-  const [search, setSearch] = useState(getQueryParams().search as string);
+  const { onLoadSectionsByClass, isSectionOptionLoading, sectionOptions } = useSectionOptions();
 
   const handleValuesChange = (changedValues: Partial<FilterFormValues>) => {
     const [fieldName] = Object.keys(changedValues) as (keyof FilterFormValues)[];
@@ -48,6 +44,10 @@ const StudentTable = () => {
       delete params[fieldName];
     }
 
+    if (fieldName === 'class_id' && fieldValue) {
+      onLoadSectionsByClass(fieldValue);
+    }
+    
     // If class_id is cleared, also remove section_id from URL
     if (fieldName === 'class_id' && (fieldValue === undefined || fieldValue === null)) {
       delete params.section_id;
@@ -67,25 +67,23 @@ const StudentTable = () => {
       offset: 0
     });
   };
-
+  
   useEffect(() => {
-    const initialValues: FilterFormValues = {
-      class_id: queryParams.class_id ? Number(queryParams.class_id) : undefined,
-      section_id: queryParams.section_id ? Number(queryParams.section_id) : undefined,
-      shift_id: queryParams.shift_id ? Number(queryParams.shift_id) : undefined,
-      status_id: queryParams.status_id ? Number(queryParams.status_id) : undefined,
-    };
-
-    form.setFieldsValue(initialValues);
-    searchForm.setFieldsValue({ search: queryParams.search });
-  }, []);
-
-  // Reset section when class changes
-  useEffect(() => {
-    if (!selectedClassId) {
-      form.setFieldsValue({ section_id: undefined });
+    if (defaultFilterParams) {
+      form.setFieldsValue({
+        class_id: defaultFilterParams.class_id,
+        section_id: defaultFilterParams.section_id,
+        shift_id: defaultFilterParams.shift_id,
+        status_id: defaultFilterParams.status_id
+      });
+      
+      searchForm.setFieldsValue({ search: defaultFilterParams.search });
+      
+      if (defaultFilterParams.class_id) {
+        onLoadSectionsByClass(defaultFilterParams.class_id);
+      }
     }
-  }, [selectedClassId]);
+  }, [defaultFilterParams]);
   
   return (
     <>
@@ -123,7 +121,7 @@ const StudentTable = () => {
                   style={{ width: '100%' }}
                   loading={isSectionOptionLoading}
                   options={sectionOptions}
-                  disabled={!selectedClassId}
+                  disabled={!form.getFieldValue('class_id')}
                 />
               </Form.Item>
             </Col>
@@ -164,12 +162,9 @@ const StudentTable = () => {
         extra={(
           <div className="my-4">
             <Form form={searchForm} layout="inline">
-              
               <Form.Item name="search" className="!mr-0">
                 <Search
                   placeholder="Search by name, student no, roll or mobile no"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
                   onSearch={onSearchHandle}
                   allowClear
                   style={{ width: 350 }}

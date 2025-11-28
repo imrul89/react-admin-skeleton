@@ -3,7 +3,7 @@ import { Tag, Button, Tooltip, Avatar, Typography } from 'antd';
 import { SwapOutlined } from '@ant-design/icons';
 import { Attendance } from '@models/attendance-model';
 import { ATTENDANCE_FOR } from '@utils/constants';
-import { dateFormat } from '@utils/helpers';
+import { dateFormat, getShiftName } from '@utils/helpers';
 
 export const attendanceTableColumns = (
   onToggleStatus: (id: number, currentStatus: number) => void,
@@ -40,7 +40,23 @@ export const attendanceTableColumns = (
     title: 'Class',
     key: 'class',
     width: 200,
-    render: (_: any, record: Attendance) => record.student?.class?.title || 'N/A'
+    render: (_: any, record: Attendance) => (
+      <div>
+        <div>{record.student?.class?.title || 'N/A'}</div>
+        {record.student?.section?.title && (
+          <Typography.Text type="secondary" style={{ display: 'flex', fontSize: 12 }}>
+            {record.student.section.title}
+          </Typography.Text>
+        )}
+      </div>
+    )
+  },
+  {
+    title: 'Shift',
+    key: 'shift',
+    width: 100,
+    align: 'center',
+    render: (_: any, record: Attendance) => getShiftName(record.student?.shift_id) || 'N/A'
   },
   {
     title: 'Type',

@@ -82,6 +82,13 @@ export const studentsService = baseService.injectEndpoints({
         body: data
       }),
       invalidatesTags: ['students', 'student']
+    }),
+    studentsForBulkUpdate: builder.query<Students, { classId: number; shiftId: number }>({
+      query: ({ classId, shiftId }) => ({
+        url: `${API_END_POINTS.students}/bulk-update/list?class_id=${classId}&shift_id=${shiftId}`,
+        method: 'GET'
+      }),
+      providesTags: ['students']
     })
   })
 });
@@ -94,5 +101,6 @@ export const {
   useUpdateStudentSettingsMutation,
   useLazyClassWiseStudentsQuery,
   useBulkAssignSectionMutation,
-  useBulkUpdateStudentsMutation
+  useBulkUpdateStudentsMutation,
+  useStudentsForBulkUpdateQuery
 } = studentsService;

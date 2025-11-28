@@ -13,4 +13,6 @@ export const API_END_POINTS = {
   tuitionFeePayments: '/v1/tuition-fee-payments',
   settings: '/v1/settings',
   attendance: '/v1/attendance',
+  dashboard: '/v1/dashboard',
+  paymentReports: '/v1/payment-reports',
 };

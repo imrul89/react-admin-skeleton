@@ -1,280 +1,191 @@
-import dayjs from 'dayjs';
-import { useState } from 'react';
-import { Card, Table, Button, Tag, Typography, Row, Col, Statistic, DatePicker, Select, Space } from 'antd';
-import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { useState, useMemo } from 'react';
+import { Card, Row, Col, Statistic, Spin, Select, Calendar } from 'antd';
+import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import dayjs, { Dayjs } from 'dayjs';
 import { Student } from '@models/student-model';
-
-const { Title, Text } = Typography;
-const { RangePicker } = DatePicker;
+import { useStudentAttendanceSummaryQuery } from '@services/attendance-service';
+import { MONTHS } from '@utils/constants';
 
 interface StudentAttendanceTabProps {
   student: Student;
 }
 
-interface AttendanceRecord {
-  id: number;
-  date: string;
-  status: 'present' | 'absent' | 'late' | 'excused';
-  subject?: string;
-  remarks?: string;
-  markedBy?: string;
-}
-
-// Mock data - replace with actual API calls
-const mockAttendanceData: AttendanceRecord[] = [
-  {
-    id: 1,
-    date: '2024-03-15',
-    status: 'present',
-    subject: 'Mathematics',
-    remarks: 'On time',
-    markedBy: 'Teacher A'
-  },
-  {
-    id: 2,
-    date: '2024-03-14',
-    status: 'late',
-    subject: 'English',
-    remarks: 'Late by 15 minutes',
-    markedBy: 'Teacher B'
-  },
-  {
-    id: 3,
-    date: '2024-03-13',
-    status: 'absent',
-    subject: 'Science',
-    remarks: 'Sick leave',
-    markedBy: 'Teacher C'
-  },
-  {
-    id: 4,
-    date: '2024-03-12',
-    status: 'present',
-    subject: 'Mathematics',
-    remarks: 'On time',
-    markedBy: 'Teacher A'
-  },
-  {
-    id: 5,
-    date: '2024-03-11',
-    status: 'excused',
-    subject: 'English',
-    remarks: 'Medical appointment',
-    markedBy: 'Teacher B'
-  }
-];
-
 const StudentAttendanceTab = ({ student }: StudentAttendanceTabProps) => {
-  const [selectedMonth, setSelectedMonth] = useState(dayjs().format('YYYY-MM'));
-  const [selectedSubject, setSelectedSubject] = useState<string>('all');
+  const currentMonth = dayjs().month() + 1; // 1-12
+  const currentYear = dayjs().year();
+  
+  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
 
-  const totalDays = mockAttendanceData.length;
-  const presentDays = mockAttendanceData.filter(record => record.status === 'present').length;
-  const absentDays = mockAttendanceData.filter(record => record.status === 'absent').length;
-  const lateDays = mockAttendanceData.filter(record => record.status === 'late').length;
-  const excusedDays = mockAttendanceData.filter(record => record.status === 'excused').length;
-  const attendancePercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+  // Calculate start and end dates for selected month
+  const monthStart = dayjs(`${selectedYear}-${selectedMonth}-01`).startOf('month');
+  const monthEnd = dayjs(`${selectedYear}-${selectedMonth}-01`).endOf('month');
 
-  const columns = [
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
-      render: (date: string) => (
-        <div>
-          <Text strong>{dayjs(date).format('DD MMM YYYY')}</Text>
-          <br />
-          <Text type="secondary">{dayjs(date).format('dddd')}</Text>
-        </div>
-      )
-    },
-    {
-      title: 'Subject',
-      dataIndex: 'subject',
-      key: 'subject',
-      render: (subject: string) => (
-        <Tag color="blue">{subject}</Tag>
-      )
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => {
-        const statusConfig = {
-          present: { color: 'green', icon: <CheckCircleOutlined />, text: 'Present' },
-          absent: { color: 'red', icon: <CloseCircleOutlined />, text: 'Absent' },
-          late: { color: 'orange', icon: <MinusCircleOutlined />, text: 'Late' },
-          excused: { color: 'blue', icon: <CheckCircleOutlined />, text: 'Excused' }
-        };
-        const config = statusConfig[status as keyof typeof statusConfig];
-        return (
-          <Tag color={config.color} icon={config.icon}>
-            {config.text}
-          </Tag>
-        );
-      }
-    },
-    {
-      title: 'Remarks',
-      dataIndex: 'remarks',
-      key: 'remarks',
-      render: (remarks: string) => (
-        <Text type="secondary">{remarks || 'N/A'}</Text>
-      )
-    },
-    {
-      title: 'Marked By',
-      dataIndex: 'markedBy',
-      key: 'markedBy',
-      render: (markedBy: string) => (
-        <Text>{markedBy}</Text>
-      )
+  const params = useMemo(() => ({
+    start_date: monthStart.format('YYYY-MM-DD'),
+    end_date: monthEnd.format('YYYY-MM-DD')
+  }), [selectedMonth, selectedYear]);
+
+  const { data: summaryData, isLoading, isFetching } = useStudentAttendanceSummaryQuery(
+    { id: student.id, params },
+    { skip: !student.id }
+  );
+
+  const attendancePercentage = useMemo(() => {
+    if (!summaryData?.summary) return 0;
+    return parseFloat(summaryData.summary.attendance_percentage || '0');
+  }, [summaryData]);
+
+  // Create a map of attendance by date for calendar rendering
+  const attendanceMap = useMemo(() => {
+    const map = new Map<string, number>();
+    if (summaryData?.attendances) {
+      summaryData.attendances.forEach(attendance => {
+        const dateKey = dayjs(attendance.date).format('YYYY-MM-DD');
+        map.set(dateKey, attendance.status);
+      });
     }
-  ];
+    return map;
+  }, [summaryData]);
 
-  const filteredData = mockAttendanceData.filter(record => {
-    const recordMonth = dayjs(record.date).format('YYYY-MM');
-    const monthMatch = recordMonth === selectedMonth;
-    const subjectMatch = selectedSubject === 'all' || record.subject === selectedSubject;
-    return monthMatch && subjectMatch;
+  // Generate month options for dropdown
+  const monthOptions = MONTHS.map(month => ({
+    value: month.value,
+    label: month.label
+  }));
+
+  // Generate year options (current year and previous 2 years)
+  const yearOptions = Array.from({ length: 3 }, (_, i) => {
+    const year = currentYear - i;
+    return { value: year, label: year.toString() };
   });
+
+  // Calendar cell renderer
+  const dateCellRender = (value: Dayjs) => {
+    const dateKey = value.format('YYYY-MM-DD');
+    const status = attendanceMap.get(dateKey);
+    
+    if (status === undefined) {
+      return null; // No attendance record for this date
+    }
+
+    return (
+      <div className="text-center pt-3">
+        {status === 1 ? (
+          <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '32px' }} />
+        ) : (
+          <CloseCircleOutlined style={{ color: '#ff4d4f', fontSize: '32px' }} />
+        )}
+      </div>
+    );
+  };
+
+  const onPanelChange = (value: Dayjs) => {
+    setSelectedMonth(value.month() + 1);
+    setSelectedYear(value.year());
+  };
 
   return (
     <div className="space-y-6">
-      {/* Attendance Summary */}
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} md={6}>
-          <Card className="!bg-gray-50" bordered={false}>
-            <Statistic
-              title="Total Days"
-              value={totalDays}
-              prefix={<CalendarOutlined />}
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="Present Days"
-              value={presentDays}
-              prefix={<CheckCircleOutlined />}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="Absent Days"
-              value={absentDays}
-              prefix={<CloseCircleOutlined />}
-              valueStyle={{ color: '#ff4d4f' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="Attendance %"
-              value={attendancePercentage}
-              suffix="%"
-              valueStyle={{
-                color: attendancePercentage >= 80 ? '#52c41a' :
-                       attendancePercentage >= 60 ? '#faad14' : '#ff4d4f'
-              }}
-            />
-          </Card>
-        </Col>
-      </Row>
-
-      {/* Additional Stats */}
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={8}>
-          <Card size="small">
-            <Statistic
-              title="Late Days"
-              value={lateDays}
-              prefix={<MinusCircleOutlined />}
-              valueStyle={{ color: '#faad14' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={8}>
-          <Card size="small">
-            <Statistic
-              title="Excused Days"
-              value={excusedDays}
-              prefix={<CheckCircleOutlined />}
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={8}>
-          <Card size="small">
-            <Statistic
-              title="Working Days"
-              value={totalDays - excusedDays}
-              prefix={<CalendarOutlined />}
-              valueStyle={{ color: '#722ed1' }}
-            />
-          </Card>
-        </Col>
-      </Row>
-
-      {/* Filters */}
-      <Card title="Attendance Records" size="small">
-        <div className="mb-4">
-          <Space wrap>
-            <div>
-              <Text strong className="mr-2">Month:</Text>
-              <DatePicker
-                picker="month"
-                value={dayjs(selectedMonth)}
-                onChange={(date) => setSelectedMonth(date?.format('YYYY-MM') || dayjs().format('YYYY-MM'))}
-              />
-            </div>
-            <div>
-              <Text strong className="mr-2">Subject:</Text>
+      {/* Month and Year Selectors */}
+      <Card>
+        <Row gutter={16}>
+          <Col xs={24} sm={12} md={8}>
+            <div className="mb-2">
+              <label className="block text-sm font-medium mb-1">Month</label>
               <Select
-                value={selectedSubject}
-                onChange={setSelectedSubject}
-                style={{ width: 150 }}
-                options={[
-                  { value: 'all', label: 'All Subjects' },
-                  { value: 'Mathematics', label: 'Mathematics' },
-                  { value: 'English', label: 'English' },
-                  { value: 'Science', label: 'Science' }
-                ]}
+                value={selectedMonth}
+                onChange={setSelectedMonth}
+                options={monthOptions}
+                style={{ width: '100%' }}
+                placeholder="Select Month"
               />
             </div>
-          </Space>
-        </div>
-
-        <Table
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} records`
-          }}
-          size="small"
-        />
+          </Col>
+          <Col xs={24} sm={12} md={8}>
+            <div className="mb-2">
+              <label className="block text-sm font-medium mb-1">Year</label>
+              <Select
+                value={selectedYear}
+                onChange={setSelectedYear}
+                options={yearOptions}
+                style={{ width: '100%' }}
+                placeholder="Select Year"
+              />
+            </div>
+          </Col>
+        </Row>
       </Card>
 
-      {/* Attendance Chart Placeholder */}
-      <Card title="Attendance Trend" size="small">
-        <div className="text-center py-8">
-          <Text type="secondary">
-            Attendance chart will be displayed here
-            <br />
-            (Chart component can be integrated later)
-          </Text>
-        </div>
+      {/* Attendance Summary */}
+      <Spin spinning={isLoading || isFetching}>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="Total Days"
+                value={summaryData?.summary?.total_days || 0}
+                prefix={<CalendarOutlined />}
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="Present Days"
+                value={summaryData?.summary?.present_days || 0}
+                prefix={<CheckCircleOutlined />}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="Absent Days"
+                value={summaryData?.summary?.absent_days || 0}
+                prefix={<CloseCircleOutlined />}
+                valueStyle={{ color: '#ff4d4f' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="Attendance %"
+                value={attendancePercentage}
+                suffix="%"
+                precision={2}
+                valueStyle={{
+                  color: attendancePercentage >= 80 ? '#52c41a' :
+                         attendancePercentage >= 60 ? '#faad14' : '#ff4d4f'
+                }}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
+
+      {/* Calendar */}
+      <Card title="Attendance Calendar">
+        <Spin spinning={isLoading || isFetching}>
+          <Calendar
+            value={dayjs()}
+            dateCellRender={dateCellRender}
+            onPanelChange={onPanelChange}
+          />
+          <div className="mt-4 flex gap-4 justify-center">
+            <div className="flex items-center gap-2">
+              <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '16px' }} />
+              <span className="text-sm">Present</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CloseCircleOutlined style={{ color: '#ff4d4f', fontSize: '16px' }} />
+              <span className="text-sm">Absent</span>
+            </div>
+          </div>
+        </Spin>
       </Card>
     </div>
   );

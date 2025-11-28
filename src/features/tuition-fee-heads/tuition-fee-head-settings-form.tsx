@@ -4,7 +4,7 @@ import { SaveOutlined } from '@ant-design/icons';
 import { useClassOptions } from '@hooks/use-school-classes';
 import { useTuitionFeeHeadConfigs, useTuitionFeeHeadSettingsForm } from '@hooks/use-tuition-fee-heads';
 import { TuitionFeeHead, TuitionFeeHeadConfigRequestData } from '@models/tuition-fee-head-model';
-import { MONTHS, TUITION_FEE_HEAD_TYPES } from '@utils/constants';
+import { MONTHS, TUITION_FEE_HEAD_TYPE_OPTIONS } from '@utils/constants';
 import { validationMessage } from '@utils/helpers/message-helpers';
 
 interface FormValues {
@@ -97,7 +97,7 @@ const TuitionFeeHeadSettingsForm = () => {
               ]}
             >
               <Select
-                options={TUITION_FEE_HEAD_TYPES}
+                options={TUITION_FEE_HEAD_TYPE_OPTIONS}
                 placeholder="Select Account Type"
               />
             </Form.Item>

@@ -10,7 +10,11 @@ import {
   PreparedOption,
   QueryParams
 } from '@models/utils-model';
-import { DEFAULT_DISPLAY_DATE_FORMAT } from '@utils/constants';
+import {
+  DEFAULT_DISPLAY_DATE_FORMAT, MONTHS,
+  SHIFTS,
+  TUITION_FEE_HEAD_TYPES
+} from '@utils/constants';
 
 export const isProd = import.meta.env.MODE === 'production';
 
@@ -20,6 +24,33 @@ export const dateFormat = (date: string) => {
 
 export const getMonthName = (month: number) => {
   return dayjs().month(month - 1).format('MMMM');
+};
+
+export const getMonths = (monthString: string | null | undefined) => {
+  if (!monthString) {
+    return null;
+  }
+  
+  const monthNumbers = monthString.split(',').map(numStr => parseInt(numStr, 10));
+  
+  return MONTHS.filter(month => monthNumbers.includes(month.value))
+    .map(month => month.label);
+};
+
+export const getTuitionFeeHeadType = (typeId: number | undefined) => {
+  if (!typeId) {
+    return null;
+  }
+  
+  return TUITION_FEE_HEAD_TYPES[typeId as keyof typeof TUITION_FEE_HEAD_TYPES];
+};
+
+export const getShiftName = (shiftId: number | undefined) => {
+  if (!shiftId) {
+    return null;
+  }
+  
+  return SHIFTS[shiftId as keyof typeof SHIFTS];
 };
 
 export const isJsonString = (value: string) => {

@@ -13,6 +13,7 @@ import StudentAttendanceTab from '@features/students/components/student-attendan
 import StudentProfileTab from '@features/students/components/student-profile-tab';
 import StudentSettingsTab from '@features/students/components/student-settings-tab';
 import StudentTuitionFeeTab from '@features/students/components/student-tuition-fee-tab';
+import StudentCoachingTuitionFeeTab from '@features/students/components/student-coaching-tuition-fee-tab';
 import { Student } from '@models/student-model';
 import { CURRENCY_SYMBOL } from '@utils/constants';
 
@@ -34,6 +35,12 @@ const StudentDetails = ({
       key: 'tuition-fee',
       label: 'Tuition Fee',
       children: <StudentTuitionFeeTab student={student} />,
+      icon: <span className="text-lg font-light">{CURRENCY_SYMBOL}</span>
+    },
+    {
+      key: 'coaching-tuition-fee',
+      label: 'Coaching Tuition Fee',
+      children: <StudentCoachingTuitionFeeTab student={student} />,
       icon: <span className="text-lg font-light">{CURRENCY_SYMBOL}</span>
     },
     {

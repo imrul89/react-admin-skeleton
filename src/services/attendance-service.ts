@@ -6,7 +6,9 @@ import {
   ClassWiseAttendanceResponse,
   UpdateAttendanceRequest,
   CheckAttendanceExistsRequest,
-  CheckAttendanceExistsResponse
+  CheckAttendanceExistsResponse,
+  StudentAttendanceSummaryResponse,
+  StudentAttendanceSummaryParams
 } from '@models/attendance-model';
 import baseService from '@services/core/base-service';
 import { API_END_POINTS } from '@utils/constants/api-end-points';
@@ -58,6 +60,14 @@ export const attendanceService = baseService.injectEndpoints({
         method: 'POST',
         body: data
       })
+    }),
+    studentAttendanceSummary: builder.query<StudentAttendanceSummaryResponse, { id: number; params?: StudentAttendanceSummaryParams }>({
+      query: ({ id, params }) => ({
+        url: `${API_END_POINTS.attendance}/student/${id}/summary`,
+        method: 'GET',
+        params
+      }),
+      providesTags: ['attendance']
     })
   })
 });
@@ -68,6 +78,7 @@ export const {
   useCreateClassWiseAttendanceMutation,
   useUpdateAttendanceMutation,
   useDeleteAttendanceMutation,
-  useCheckAttendanceExistsMutation
+  useCheckAttendanceExistsMutation,
+  useStudentAttendanceSummaryQuery
 } = attendanceService;
 

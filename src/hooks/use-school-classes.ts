@@ -73,8 +73,8 @@ export const useSchoolClassForm = () => {
   };
 };
 
-export const useSchoolClass = (schoolClassId: number) => {
-  const { isLoading, data: schoolClass } = useSchoolClassQuery(schoolClassId);
+export const useSchoolClass = (schoolClassId: number, options?: { skip?: boolean }) => {
+  const { isLoading, data: schoolClass } = useSchoolClassQuery(schoolClassId, { skip: options?.skip || !schoolClassId });
 
   return {
     isLoading,

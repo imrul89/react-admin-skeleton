@@ -1,36 +1,19 @@
-import { Link } from 'react-router-dom';
-import { MenuProps, Dropdown, Button, TableProps } from 'antd';
-import { MoreOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, TableProps, Tag } from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
 import TypographyWrapper from '@components/shared/typography-wrapper';
 import { SchoolClass } from '@models/school-class-model';
+import { getMonths } from '@utils/helpers';
 
-const getActions = (record: SchoolClass): MenuProps['items'] => {
-  return [
-    {
-      key: `edit-${record.id}`,
-      label: <Link to={`/classes/${record.id}`}>
-        <EditOutlined /> Edit
-      </Link>
-    }
-  ];
-};
+interface ColumnsProps {
+  onConfigClick: (record: SchoolClass) => void;
+}
 
-const columns: TableProps<SchoolClass>['columns'] = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    sorter: true,
-    render: (_, record) => (
-      <TypographyWrapper type="text">
-        {record.id}
-      </TypographyWrapper>
-    )
-  },
+const getColumns = ({ onConfigClick }: ColumnsProps): TableProps<SchoolClass>['columns'] => [
   {
     title: 'Title',
     dataIndex: 'title',
     key: 'title',
+    width: 200,
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.title}
@@ -41,6 +24,9 @@ const columns: TableProps<SchoolClass>['columns'] = [
     title: 'Code',
     dataIndex: 'code',
     key: 'code',
+    sorter: true,
+    width: 120,
+    align: 'center',
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.code}
@@ -51,6 +37,9 @@ const columns: TableProps<SchoolClass>['columns'] = [
     title: 'Serial',
     dataIndex: 'serial',
     key: 'serial',
+    sorter: true,
+    width: 120,
+    align: 'center',
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.serial}
@@ -58,12 +47,14 @@ const columns: TableProps<SchoolClass>['columns'] = [
     )
   },
   {
-    title: 'Coaching Applicable',
+    title: 'Coaching Applicable on Months',
     dataIndex: 'coaching_applicable',
     key: 'coaching_applicable',
     render: (_, record) => (
       <TypographyWrapper type="text">
-        {record.coaching_applicable}
+        {getMonths(record.coaching_applicable)?.map(month => (
+          <Tag className="!my-1">{month}</Tag>
+        ))}
       </TypographyWrapper>
     )
   },
@@ -74,16 +65,14 @@ const columns: TableProps<SchoolClass>['columns'] = [
     align: 'center',
     width: 100,
     render: (_, record) => (
-      <Dropdown
-        key={`action-${record.id}`}
-        menu={{ items: getActions(record) }}
-        trigger={['click']}
-        overlayClassName="grid-action"
-      >
-        <Button shape="circle" icon={<MoreOutlined />} />
-      </Dropdown>
+      <Button 
+        shape="circle" 
+        icon={<SettingOutlined />}
+        onClick={() => onConfigClick(record)}
+        title="Configure"
+      />
     )
   }
 ];
 
-export { columns };
+export { getColumns };

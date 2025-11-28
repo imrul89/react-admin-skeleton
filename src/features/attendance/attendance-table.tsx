@@ -17,7 +17,7 @@ import { useAttendances } from '@hooks/use-attendance';
 import { useClassOptions } from '@hooks/use-school-classes';
 import useFilter from '@hooks/utility-hooks/use-filter';
 import { useUpdateAttendanceMutation } from '@services/attendance-service';
-import { ATTENDANCE_FOR } from '@utils/constants';
+import { ATTENDANCE_FOR, SHIFT_OPTIONS } from '@utils/constants';
 import { attendanceTableColumns } from './attendance-table-columns';
 
 const { RangePicker } = DatePicker;
@@ -29,6 +29,7 @@ const ATTENDANCE_STATUS = [
 
 interface FilterFormValues {
   class_id?: number;
+  shift_id?: number;
   status?: number;
   attendance_for?: number;
   date_range?: [Dayjs, Dayjs];
@@ -94,6 +95,7 @@ const AttendanceTable = () => {
   useEffect(() => {
     const initialValues: FilterFormValues = {
       class_id: queryParams.class_id ? Number(queryParams.class_id) : undefined,
+      shift_id: queryParams.shift_id ? Number(queryParams.shift_id) : undefined,
       status: queryParams.status !== undefined ? Number(queryParams.status) : undefined,
       attendance_for: queryParams.attendance_for ? Number(queryParams.attendance_for) : undefined,
     };
@@ -158,7 +160,7 @@ const AttendanceTable = () => {
           onValuesChange={handleValuesChange}
         >
           <Row gutter={24}>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item
                 label="Class"
                 name="class_id"
@@ -172,7 +174,20 @@ const AttendanceTable = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <Form.Item
+                label="Shift"
+                name="shift_id"
+              >
+                <Select
+                  placeholder="Select shift"
+                  allowClear
+                  style={{ width: '100%' }}
+                  options={SHIFT_OPTIONS}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
               <Form.Item
                 label="Status"
                 name="status"
@@ -185,7 +200,7 @@ const AttendanceTable = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item
                 label="Type"
                 name="attendance_for"

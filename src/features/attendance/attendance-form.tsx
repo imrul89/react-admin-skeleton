@@ -1,14 +1,15 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { App, Card, Form, Row, Col, Button, Select, DatePicker, Typography, Space, Tag, Divider, Alert } from 'antd';
 import { SaveOutlined, WarningOutlined } from '@ant-design/icons';
 import { useClassWiseAttendanceForm } from '@hooks/use-attendance';
-import { useClassOptions } from '@hooks/use-school-classes';
-import { StudentOption, useClassWiseStudents } from '@hooks/use-students';
+import { useClassOptions, useSchoolClass } from '@hooks/use-school-classes';
+import { useStudentsQuery } from '@services/students-service';
 import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
 import { ClassWiseAttendanceRequest } from '@models/attendance-model';
 import { useCheckAttendanceExistsMutation } from '@services/attendance-service';
-import { ATTENDANCE_FOR } from '@utils/constants';
+import { ATTENDANCE_FOR, SHIFT_OPTIONS } from '@utils/constants';
+import { formatQueryParams } from '@utils/helpers';
 
 const { Text } = Typography;
 
@@ -23,6 +24,7 @@ const AttendanceForm = () => {
   const [checkExists, { isLoading: isChecking }] = useCheckAttendanceExistsMutation();
 
   const [classId, setClassId] = useState<number | undefined>(undefined);
+  const [shiftId, setShiftId] = useState<number | undefined>(undefined);
   const [attendanceFor, setAttendanceFor] = useState<number | undefined>(undefined);
   const [date, setDate] = useState<Dayjs>(dayjs());
   const [absentStudentIds, setAbsentStudentIds] = useState<number[]>([]);
@@ -32,22 +34,82 @@ const AttendanceForm = () => {
     total_students: number;
   } | null>(null);
 
-  const { onLoadClassWiseStudents, isStudentsLoading, students } = useClassWiseStudents();
+  // Fetch class details to check coaching_applicable months
+  const { schoolClass } = useSchoolClass(classId || 0, { skip: !classId });
+
+  // Fetch students by class and shift
+  const currentYear = new Date().getFullYear();
+  const studentsQueryParams = classId && shiftId 
+    ? formatQueryParams({ 
+        class_id: classId, 
+        shift_id: shiftId, 
+        year: currentYear, 
+        limit: 500 
+      })
+    : '';
+  
+  const { data: studentsData, isLoading: isStudentsLoading } = useStudentsQuery(
+    studentsQueryParams,
+    { skip: !classId || !shiftId }
+  );
+
+  // Filter students based on coaching month eligibility
+  const students = useMemo(() => {
+    if (!studentsData?.students) return [];
+
+    let eligibleStudents = studentsData.students;
+
+    // For coaching attendance, filter by coaching month eligibility
+    if (attendanceFor === 2 && date && schoolClass) { // 2 = Coaching
+      const attendanceMonth = date.month() + 1; // dayjs month is 0-11, so add 1
+
+      // Get class coaching applicable months
+      const classCoachingMonths = schoolClass.coaching_applicable
+        ? schoolClass.coaching_applicable.split(',').map(m => parseInt(m.trim(), 10)).filter(m => !isNaN(m) && m >= 1 && m <= 12)
+        : [];
+
+      // Check if coaching is applicable for this month
+      if (classCoachingMonths.length > 0 && classCoachingMonths.includes(attendanceMonth)) {
+        // Filter students: month should NOT be in student's coaching_off
+        eligibleStudents = studentsData.students.filter(student => {
+          if (!student.coaching_off) {
+            return true; // No coaching_off means coaching is enabled
+          }
+          const studentCoachingOffMonths = student.coaching_off
+            .split(',')
+            .map(m => parseInt(m.trim(), 10))
+            .filter(m => !isNaN(m) && m >= 1 && m <= 12);
+          return !studentCoachingOffMonths.includes(attendanceMonth);
+        });
+      } else {
+        // Coaching not applicable for this month, return empty array
+        eligibleStudents = [];
+      }
+    }
+
+    return eligibleStudents.map(student => ({
+      label: `Roll: ${student.roll} - ${student.studentDetails?.name || 'N/A'}`,
+      value: student.id,
+      roll: student.roll,
+      name: student.studentDetails?.name || 'N/A'
+    }));
+  }, [studentsData, attendanceFor, date, schoolClass]);
 
   useEffect(() => {
-    // Reset absent students when class changes
+    // Reset absent students when class or shift changes
     setAbsentStudentIds([]);
     form.setFieldValue('absent_student_ids', []);
     setExistsWarning(null);
-  }, [classId]);
+  }, [classId, shiftId]);
 
   useEffect(() => {
     // Check if attendance already exists when parameters change
     const checkAttendanceExists = async () => {
-      if (classId && attendanceFor && date) {
+      if (classId && shiftId && attendanceFor && date) {
         try {
           const result = await checkExists({
             class_id: classId,
+            shift_id: shiftId,
             attendance_for: attendanceFor,
             date: date.format('YYYY-MM-DD')
           }).unwrap();
@@ -64,15 +126,16 @@ const AttendanceForm = () => {
     };
 
     checkAttendanceExists();
-  }, [classId, attendanceFor, date]);
+  }, [classId, shiftId, attendanceFor, date]);
 
   const handleClassChange = (value: number) => {
     setClassId(value);
     form.setFieldValue('class_id', value);
-    
-    if (value) {
-      onLoadClassWiseStudents(value);
-    }
+  };
+
+  const handleShiftChange = (value: number) => {
+    setShiftId(value);
+    form.setFieldValue('shift_id', value);
   };
 
   const handleAttendanceForChange = (value: number) => {
@@ -89,6 +152,7 @@ const AttendanceForm = () => {
 
   const onFinished = () => {
     const className = (classOptions || []).find(c => c.value === classId)?.label || 'selected class';
+    const shiftName = SHIFT_OPTIONS.find(s => s.value === shiftId)?.label || 'selected shift';
     const attendanceType = ATTENDANCE_FOR.find(a => a.value === attendanceFor)?.label || 'selected type';
     const formattedDate = date.format('YYYY-MM-DD');
     
@@ -98,6 +162,7 @@ const AttendanceForm = () => {
         <div>
           <p>Are you sure you want to save attendance for:</p>
           <p><strong>Class:</strong> {className}</p>
+          <p><strong>Shift:</strong> {shiftName}</p>
           <p><strong>Type:</strong> {attendanceType}</p>
           <p><strong>Date:</strong> {formattedDate}</p>
           <Divider style={{ margin: '12px 0' }} />
@@ -112,6 +177,7 @@ const AttendanceForm = () => {
       onOk: () => {
         const data: ClassWiseAttendanceRequest = {
           class_id: classId!,
+          shift_id: shiftId!,
           attendance_for: attendanceFor!,
           date: formattedDate,
           absent_student_ids: absentStudentIds
@@ -134,7 +200,7 @@ const AttendanceForm = () => {
         onFinish={onFinished}
       >
         <Row gutter={24}>
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item
               label="Class"
               name="class_id"
@@ -149,7 +215,21 @@ const AttendanceForm = () => {
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
+            <Form.Item
+              label="Shift"
+              name="shift_id"
+              rules={[{ required: true, message: 'Please select a shift' }]}
+              className="!mb-0"
+            >
+              <Select
+                placeholder="Select shift"
+                options={SHIFT_OPTIONS}
+                onChange={handleShiftChange}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
             <Form.Item
               label="Attendance For"
               name="attendance_for"
@@ -163,7 +243,7 @@ const AttendanceForm = () => {
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item
               label="Date"
               name="date"
@@ -192,7 +272,7 @@ const AttendanceForm = () => {
           />
         )}
 
-        {classId && attendanceFor && (
+        {classId && shiftId && attendanceFor && (
           <>
             <Divider />
             
@@ -256,7 +336,7 @@ const AttendanceForm = () => {
                 <div className="mt-2">
                   <Space size={[8, 8]} wrap>
                     {absentStudentIds.map(id => {
-                      const student = students.find((s: StudentOption) => s.value === id);
+                      const student = students.find((s: any) => s.value === id);
                       return student ? (
                         <Tag key={id} color="red" closable onClose={() => {
                           const newAbsentIds = absentStudentIds.filter(sid => sid !== id);

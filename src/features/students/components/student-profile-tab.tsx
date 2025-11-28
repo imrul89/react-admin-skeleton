@@ -2,7 +2,8 @@ import dayjs from 'dayjs';
 import { Row, Col, Typography, Descriptions, Divider, Tag } from 'antd';
 import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 import { Student } from '@models/student-model';
-import { OCCUPATIONS, RELIGIONS, SHIFTS } from '@utils/constants';
+import { OCCUPATIONS, RELIGIONS } from '@utils/constants';
+import { getShiftName } from '@utils/helpers';
 
 const { Title, Text } = Typography;
 
@@ -25,7 +26,7 @@ const StudentProfileTab = ({ student }: StudentProfileTabProps) => {
           <Descriptions column={1} size="small">
             {student?.shift_id && (
               <Descriptions.Item label="Shift">
-                {SHIFTS[student?.shift_id as keyof typeof SHIFTS]}
+                {getShiftName(student?.shift_id)}
               </Descriptions.Item>
             )}
             <Descriptions.Item label="Class">

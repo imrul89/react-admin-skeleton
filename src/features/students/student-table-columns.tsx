@@ -3,7 +3,7 @@ import { TableProps, Tag, Typography, Avatar } from 'antd';
 import TypographyWrapper from '@components/shared/typography-wrapper';
 import StudentTableColumnActions from '@features/students/student-table-column-actions';
 import { Student } from '@models/student-model';
-import { SHIFTS } from '@/utils/constants';
+import { getShiftName } from '@utils/helpers';
 
 const columns: TableProps<Student>['columns'] = [
   {
@@ -71,7 +71,7 @@ const columns: TableProps<Student>['columns'] = [
     render: (_, record) => {
       return (
         <TypographyWrapper type="text">
-          {record?.shift_id ? SHIFTS[record?.shift_id as keyof typeof SHIFTS] || '-' : '-'}
+          {getShiftName(record?.shift_id)}
         </TypographyWrapper>
       );
     }

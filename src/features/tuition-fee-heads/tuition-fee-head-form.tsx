@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { Card, Form, Row, Col, Button, Input, Select, Radio, InputNumber } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
-import { useTuitionFeeHeadForm } from '@hooks/use-tuition-fee-heads.ts';
+import { useTuitionFeeHeadForm } from '@hooks/use-tuition-fee-heads';
 import { useFormValidation } from '@hooks/utility-hooks/use-form-validation';
-import { TuitionFeeHead, TuitionFeeHeadPartial } from '@models/tuition-fee-head-model.ts';
-import { TUITION_FEE_HEAD_TYPES } from '@utils/constants';
+import { TuitionFeeHead, TuitionFeeHeadPartial } from '@models/tuition-fee-head-model';
+import { TUITION_FEE_HEAD_TYPE_OPTIONS } from '@utils/constants';
 import { validationMessage } from '@utils/helpers/message-helpers';
 
 interface TuitionFeeHeadFormProps {
@@ -61,13 +61,13 @@ const TuitionFeeHeadForm = ({
           <Col span={12}>
             <Form.Item
               label="Account Type"
-              name="head_type_id"
+              name="account_type_id"
               rules={[
                 { required: true, message: validationMessage('account type') }
               ]}
             >
               <Select
-                options={TUITION_FEE_HEAD_TYPES}
+                options={TUITION_FEE_HEAD_TYPE_OPTIONS}
                 placeholder="Select Account Type"
               />
             </Form.Item>
@@ -80,9 +80,9 @@ const TuitionFeeHeadForm = ({
                 { required: true, message: validationMessage('Type') }
               ]}
             >
-              <Radio.Group>
-                <Radio value="COST">Cost</Radio>
-                <Radio value="FINE">Fine</Radio>
+              <Radio.Group buttonStyle="outline">
+                <Radio.Button value="COST">Cost</Radio.Button>
+                <Radio.Button value="FINE">Fine</Radio.Button>
               </Radio.Group>
             </Form.Item>
           </Col>

@@ -14,11 +14,10 @@ const SchoolClassEdit = () => {
     <>
       <PageHeader
         title="Edit Class"
-        subTitle="Update the class details below"
       />
       <PageContent>
         <Spin spinning={isLoading}>
-          <SchoolClassForm initialValues={ schoolClass } isEditMode />
+          <SchoolClassForm initialValues={schoolClass} isEditMode />
         </Spin>
       </PageContent>
     </>

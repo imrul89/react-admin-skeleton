@@ -95,11 +95,16 @@ export const PAYMENT_INVOICE_TYPES = {
   OTHERS: 4
 };
 
-export const TUITION_FEE_HEAD_TYPES = [
-  { value: 1, label: 'School' },
-  { value: 2, label: 'Coaching' },
-  { value: 4, label: 'Other' }
-];
+export const TUITION_FEE_HEAD_TYPES = {
+  1: 'School',
+  2: 'Coaching',
+  3: 'Other'
+};
+
+export const TUITION_FEE_HEAD_TYPE_OPTIONS = Object.entries(TUITION_FEE_HEAD_TYPES).map(([key, value]) => ({
+  value: Number(key),
+  label: value
+}));
 
 export const MONTHS = [
   { value: 1, label: 'January' },
@@ -114,6 +119,21 @@ export const MONTHS = [
   { value: 10, label: 'October' },
   { value: 11, label: 'November' },
   { value: 12, label: 'December' }
+];
+
+export const MONTHS_SHORT = [
+  { value: 1, label: 'Jan' },
+  { value: 2, label: 'Feb' },
+  { value: 3, label: 'Mar' },
+  { value: 4, label: 'Apr' },
+  { value: 5, label: 'May' },
+  { value: 6, label: 'Jun' },
+  { value: 7, label: 'Jul' },
+  { value: 8, label: 'Aug' },
+  { value: 9, label: 'Sep' },
+  { value: 10, label: 'Oct' },
+  { value: 11, label: 'Nov' },
+  { value: 12, label: 'Dec' }
 ];
 
 export const ATTENDANCE_FOR = [

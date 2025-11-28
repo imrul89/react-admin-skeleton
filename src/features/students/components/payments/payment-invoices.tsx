@@ -92,7 +92,7 @@ const PaymentInvoices = ({
               {
                 key: `view-${record.id}`,
                 icon: <FileOutlined />,
-                label: <Typography.Link onClick={() => onLoadInvoiceDetails(record.id)}>Invoice Details</Typography.Link>
+                label: <Typography.Link onClick={() => onLoadInvoiceDetails(record.id)}>Details</Typography.Link>
               },
               {
                 key: `print-${record.id}`,
@@ -108,6 +108,10 @@ const PaymentInvoices = ({
             ]
           }}
           trigger={['click']}
+          placement="bottomLeft"
+          overlayStyle={{
+            minWidth: 150
+          }}
         >
           <div style={{ position: 'relative' }}>
             <Button
@@ -141,6 +145,7 @@ const PaymentInvoices = ({
         title="Invoice Details"
         open={isModalVisible}
         onCancel={handleModalClose}
+        centered={true}
         footer={
           <Flex justify="space-between" className="!pt-4">
             <Button onClick={handleModalClose}>Close</Button>
@@ -153,26 +158,6 @@ const PaymentInvoices = ({
           {selectedInvoice && (
             <div>
               <Flex vertical gap={6} className="!mb-4">
-                <Flex justify="space-between">
-                  <Flex gap={6}>
-                    <Typography.Text type="secondary">Name :</Typography.Text>
-                    <Typography.Text strong>{(selectedInvoice as any).student?.studentDetails?.name}</Typography.Text>
-                  </Flex>
-                  <Flex gap={6}>
-                    <Typography.Text type="secondary">Student No. :</Typography.Text>
-                    <Typography.Text>{(selectedInvoice as any).student?.studentDetails?.student_no}</Typography.Text>
-                  </Flex>
-                </Flex>
-                <Flex justify="space-between">
-                  <Flex gap={6}>
-                    <Typography.Text type="secondary">Class :</Typography.Text>
-                    <Typography.Text>{(selectedInvoice as any).student?.class?.title}</Typography.Text>
-                  </Flex>
-                  <Flex gap={6}>
-                    <Typography.Text type="secondary">Roll :</Typography.Text>
-                    <Typography.Text>{(selectedInvoice as any).student?.roll}</Typography.Text>
-                  </Flex>
-                </Flex>
                 <Flex justify="space-between">
                   <Flex gap={6}>
                     <Typography.Text type="secondary">Invoice No :</Typography.Text>

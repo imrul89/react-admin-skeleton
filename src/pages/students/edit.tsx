@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Spin } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import StudentForm from '@features/students/student-form';
 import { transformedToFormData } from '@features/transformers/student-transformers';
 import { useStudent } from '@hooks/use-students';
@@ -28,7 +29,13 @@ const StudentEdit = () => {
       <PageHeader
         title="Edit Student"
         subTitle="Update the student details below"
-      />
+      >
+        <Link to="/students">
+          <Button icon={<ArrowLeftOutlined />}>
+            Back to Students
+          </Button>
+        </Link>
+      </PageHeader>
       <PageContent>
         <Spin spinning={isLoading}>
           <StudentForm initialValues={studentData} isEditMode={true}/>

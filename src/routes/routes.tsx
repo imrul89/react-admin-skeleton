@@ -27,6 +27,7 @@ import TuitionFeeHeads from '@pages/tuition-fee-heads';
 import TuitionFeeHeadCreate from '@pages/tuition-fee-heads/create';
 import TuitionFeeHeadEdit from '@pages/tuition-fee-heads/edit';
 import TuitionFeeHeadSettings from '@pages/tuition-fee-heads/settings';
+import PaymentReports from '@pages/payment-reports';
 import Users from '@pages/users';
 import UserCreate from '@pages/users/create';
 import UserEdit from '@pages/users/edit';
@@ -297,6 +298,13 @@ const routes = [
         exact: true
       }
     ]
+  },
+  {
+    path: 'payment-reports',
+    breadcrumb: 'Payment Reports',
+    component: PaymentReports,
+    exact: true,
+    children: []
   },
 ];
 

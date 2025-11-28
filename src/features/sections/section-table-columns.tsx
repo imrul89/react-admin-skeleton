@@ -17,17 +17,6 @@ const getActions = (record: Section): MenuProps['items'] => {
 
 const columns: TableProps<Section>['columns'] = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    sorter: true,
-    render: (_, record) => (
-      <TypographyWrapper type="text">
-        {record.id}
-      </TypographyWrapper>
-    )
-  },
-  {
     title: 'Title',
     dataIndex: 'title',
     key: 'title',
@@ -42,20 +31,10 @@ const columns: TableProps<Section>['columns'] = [
     title: 'Class',
     dataIndex: ['class', 'title'],
     key: 'class',
+    sorter: true,
     render: (_, record) => (
       <TypographyWrapper type="text">
         {record.class?.title || 'N/A'}
-      </TypographyWrapper>
-    )
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    sorter: true,
-    render: (_, record) => (
-      <TypographyWrapper type="text" textType={record.status === 1 ? 'success' : 'secondary'}>
-        {record.status === 1 ? 'Active' : 'Inactive'}
       </TypographyWrapper>
     )
   },

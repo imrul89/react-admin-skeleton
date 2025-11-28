@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Table, Input, Card, Select } from 'antd';
+import { Table, Input, Card, Select, Flex } from 'antd';
 import PaginationWrapper from '@components/shared/pagination-wrapper';
 import TableSkeleton from '@components/shared/table-skeleton';
-import { useSections } from '@hooks/use-sections';
 import { useClassOptions } from '@hooks/use-school-classes';
+import { useSections } from '@hooks/use-sections';
 import useFilter from '@hooks/utility-hooks/use-filter';
 import { columns } from './section-table-columns';
 
@@ -28,44 +28,28 @@ const SectionTable = () => {
     });
   };
 
-  const handleStatusFilter = (status: number | null) => {
-    setQueryParams({
-      ...getQueryParams(),
-      status: status
-    });
-  };
-
   return (
     <Card
       title="Sections"
       extra={(
-        <div className="flex gap-4">
-          <Select
-            placeholder="Filter by Class"
-            style={{ width: 200 }}
-            options={classOptions}
-            onChange={handleClassFilter}
-            allowClear
-            value={getQueryParams().class_id as number}
-          />
-          <Select
-            placeholder="Filter by Status"
-            style={{ width: 150 }}
-            options={[
-              { label: 'Active', value: 1 },
-              { label: 'Inactive', value: 0 }
-            ]}
-            onChange={handleStatusFilter}
-            allowClear
-            value={getQueryParams().status as number}
-          />
-          <Input.Search
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onSearch={onSearchHandle}
-            allowClear
-          />
+        <div className="my-4">
+          <Flex gap={16}>
+            <Select
+              placeholder="Select Class"
+              options={classOptions}
+              onChange={handleClassFilter}
+              allowClear
+              value={getQueryParams().class_id as number}
+              style={{minWidth: 200}}
+            />
+            <Input.Search
+              placeholder="Search by keyword"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onSearch={onSearchHandle}
+              allowClear
+            />
+          </Flex>
         </div>
       )}
     >
